@@ -150,7 +150,7 @@ export function AdjudicationModal({
               <button
                 onClick={() => void onTriggerAdjudicate()}
                 disabled={isSubmitting}
-                className="px-6 py-2.5 rounded-[6px] border border-[#3b9eff] bg-[#3b9eff] hover:bg-[#70b8ff] text-white font-medium text-xs transition-colors disabled:opacity-50"
+                className="px-6 py-2.5 rounded-[6px] bg-[#e5e7eb] hover:bg-white text-black font-semibold text-xs transition-colors disabled:opacity-50 shadow-sm cursor-pointer"
               >
                 {isSubmitting ? "Broadcasting Consensus..." : "Execute Magistrate Adjudication"}
               </button>

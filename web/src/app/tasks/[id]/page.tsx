@@ -508,7 +508,7 @@ export default function TaskWorkstationPage({
                       [taskId]
                     )
                   }
-                  className="w-full py-2.5 rounded-[6px] border border-[#3b9eff] bg-[#3b9eff] hover:bg-[#70b8ff] text-white font-medium text-xs transition-colors"
+                  className="w-full py-2.5 rounded-[6px] bg-[#e5e7eb] hover:bg-white text-black font-semibold text-xs transition-colors shadow-sm"
                 >
                   Execute AI Magistrate Consensus
                 </button>
@@ -529,7 +529,7 @@ export default function TaskWorkstationPage({
                       [taskId]
                     )
                   }
-                  className="w-full py-2.5 rounded-[6px] border border-[#3b9eff] bg-[#3b9eff] hover:bg-[#70b8ff] text-white font-medium text-xs transition-colors"
+                  className="w-full py-2.5 rounded-[6px] bg-[#e5e7eb] hover:bg-white text-black font-semibold text-xs transition-colors shadow-sm"
                 >
                   Execute AI Magistrate Consensus
                 </button>

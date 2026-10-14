@@ -432,10 +432,10 @@ export default function CreateTaskPage() {
           </div>
         </div>
 
-        {/* Primary Action Button in Resend Signal Blue */}
+        {/* Primary Action Button in Light Grey */}
         <button
           type="submit"
-          className="w-full py-3.5 rounded-[6px] bg-[#3b9eff] hover:bg-[#3289dc] text-white font-medium text-xs tracking-wide transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full py-3.5 rounded-[6px] bg-[#e5e7eb] hover:bg-white text-black font-semibold text-xs tracking-wide transition-all duration-150 shadow-sm flex items-center justify-center gap-2 cursor-pointer"
         >
           {isConnected ? `Lock Escrow & Publish Agreement (${escrowInput} GEN)` : "Connect Wallet to Publish"}
         </button>

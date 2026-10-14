@@ -8,6 +8,40 @@ export function ShieldIcon({ className = "w-5 h-5" }: { className?: string }) {
   );
 }
 
+export function AgentSettleLogo({ className = "w-5 h-5" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Client Agent node bracket */}
+      <path
+        d="M4 8.5L8.5 4H11.5L7 8.5V14.5L4 17.5V8.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Worker Agent node bracket */}
+      <path
+        d="M20 15.5L15.5 20H12.5L17 15.5V9.5L20 6.5V15.5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* Central GenLayer AI Magistrate equilibrium diamond */}
+      <path
+        d="M12 7.5L16 12L12 16.5L8 12Z"
+        fill="#9281f7"
+        fillOpacity="0.25"
+        stroke="#9281f7"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      {/* Center consensus point */}
+      <circle cx="12" cy="12" r="1.25" fill="#ffffff" />
+    </svg>
+  );
+}
+
 export function ScaleIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,6 +49,7 @@ export function ScaleIcon({ className = "w-5 h-5" }: { className?: string }) {
     </svg>
   );
 }
+
 
 export function CheckCircleIcon({ className = "w-5 h-5" }: { className?: string }) {
   return (
