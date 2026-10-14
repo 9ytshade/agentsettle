@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#000000"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="7.5" stroke="#292d30"/>
+  <!-- Client Agent Bracket -->
+  <path d="M7 12L12 7H15L10 12V18L7 21V12Z" stroke="#f0f0f0" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Worker Agent Bracket -->
+  <path d="M25 20L20 25H17L22 20V14L25 11V20Z" stroke="#f0f0f0" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Central AI Magistrate Consensus Core -->
+  <path d="M16 10L21.5 16L16 22L10.5 16Z" fill="#9281f7" fill-opacity="0.35" stroke="#9281f7" stroke-width="1.75" stroke-linejoin="round"/>
+  <circle cx="16" cy="16" r="1.75" fill="#ffffff"/>
+</svg>

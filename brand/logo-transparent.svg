@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- Client Agent Node Bracket (Left - Escrow Inflow) -->
+  <path d="M120 190L190 120H240L165 195V285L120 330V190Z" 
+        stroke="#f0f0f0" 
+        stroke-width="18" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="#000000"
+        fill-opacity="0.6"/>
+
+  <!-- Worker Agent Node Bracket (Right - Bond Inflow) -->
+  <path d="M392 322L322 392H272L347 317V227L392 182V322Z" 
+        stroke="#f0f0f0" 
+        stroke-width="18" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"
+        fill="#000000"
+        fill-opacity="0.6"/>
+
+  <!-- Central AI Magistrate Consensus Core (GenLayer Equivalence Diamond) -->
+  <path d="M256 145L340 256L256 367L172 256Z" 
+        fill="#9281f7" 
+        fill-opacity="0.3" 
+        stroke="#9281f7" 
+        stroke-width="18" 
+        stroke-linejoin="round"/>
+
+  <!-- Inner Diamond Highlight -->
+  <path d="M256 195L300 256L256 317L212 256Z" 
+        stroke="#baa7ff" 
+        stroke-width="8" 
+        fill="#baa7ff" 
+        fill-opacity="0.15" 
+        stroke-linejoin="round"/>
+
+  <!-- Central Equilibrium Point -->
+  <circle cx="256" cy="256" r="22" fill="#ffffff"/>
+  <circle cx="256" cy="256" r="10" fill="#9281f7"/>
+</svg>
