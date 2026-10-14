@@ -14,9 +14,12 @@ export const STUDIONET_CHAIN_ID = Number(
   process.env.NEXT_PUBLIC_STUDIONET_CHAIN_ID || 61999
 );
 
+export const DEPLOYED_CONTRACT_ADDRESS = "0x7bE669b18689afb885352c87A487c8432c58d56D";
+
 export const CONTRACT_ADDRESS: `0x${string}` =
   ((process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
-    "0x0000000000000000000000000000000000000000").trim()) as `0x${string}`;
+    DEPLOYED_CONTRACT_ADDRESS).trim()) as `0x${string}`;
+
 
 let globalReadClient: ReturnType<typeof createClient> | null = null;
 
@@ -148,6 +151,11 @@ export async function fetchTasksResilient(
     }
   } catch (err) {
     console.warn("Bulk get_tasks_by_status failed, attempting individual discovery:", err);
+  }
+
+  // If no tasks exist on-chain, exit immediately with zero failures
+  if (totalCount <= 0) {
+    return { tasks: [], failedIds: [], totalCount: 0 };
   }
 
   // Fallback: Individual ID fetching with failedIds tracking
