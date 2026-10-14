@@ -16,16 +16,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col antialiased selection:bg-emerald-950 selection:text-emerald-300">
+      <body className="min-h-screen bg-black text-[#f0f0f0] flex flex-col antialiased">
         <WalletProvider>
           <AppHeader />
-          <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <main className="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
             {children}
           </main>
-          <footer className="border-t border-zinc-900 bg-zinc-950/60 py-6 text-center text-xs text-zinc-500 font-mono">
-            <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-              <p>AgentSettle v1.0.0 - Autonomous Agentic Commerce SLA Protocol</p>
-              <p>Powered by GenLayer Intelligent Contracts on Studionet (Chain 61999)</p>
+          <footer className="border-t border-[#292d30] bg-black py-8 text-center text-xs text-[#a1a4a5] font-mono">
+            <div className="max-w-[1200px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <p className="text-[#a1a4a5]">
+                AgentSettle v1.0.0 <span className="text-[#464a4d]">/</span> Autonomous Agentic Commerce SLA Protocol
+              </p>
+              <p className="text-[#6e727a]">
+                Powered by GenLayer Intelligent Contracts on Studionet (Chain 61999)
+              </p>
             </div>
           </footer>
         </WalletProvider>

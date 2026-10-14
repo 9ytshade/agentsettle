@@ -5,7 +5,7 @@ import { useWallet } from "../../lib/use-wallet";
 import { fetchAgentProfile } from "../../lib/genlayer";
 import { formatAddress, formatGen } from "../../lib/safety";
 import type { AgentProfileRecord } from "../../types/agentsettle";
-import { BotIcon, ShieldIcon, ScaleIcon, CheckCircleIcon } from "../../components/icons";
+import { BotIcon } from "../../components/icons";
 
 export default function AgentLedgerPage() {
   const { account, isConnected } = useWallet();
@@ -41,26 +41,26 @@ export default function AgentLedgerPage() {
 
   const score = profile?.reliability_score ?? 80;
   let tierLabel = "Certified Agent";
-  let tierColor = "text-emerald-400 border-emerald-800 bg-emerald-950/60";
+  let tierColor = "text-[#3ad389]";
 
   if (score >= 90) {
     tierLabel = "Tier 1 Sovereign Agent";
-    tierColor = "text-emerald-400 border-emerald-800 bg-emerald-950/80";
+    tierColor = "text-[#9281f7]";
   } else if (score >= 70) {
     tierLabel = "Standard Reliable Agent";
-    tierColor = "text-blue-400 border-blue-800 bg-blue-950/80";
+    tierColor = "text-[#70b8ff]";
   } else {
     tierLabel = "Probation / Slashed Risk";
-    tierColor = "text-amber-400 border-amber-800 bg-amber-950/80";
+    tierColor = "text-[#ffca16]";
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-10">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-100">
+        <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-white">
           Agent Reliability Ledger
         </h1>
-        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-1 font-sans">
           Machine-verifiable on-chain reputation metrics, completed tasks, and dispute performance across GenLayer agentic commerce.
         </p>
       </div>
@@ -72,80 +72,80 @@ export default function AgentLedgerPage() {
           placeholder="0x... Enter Agent Address"
           value={searchAddr}
           onChange={(e) => setSearchAddr(e.target.value)}
-          className="flex-1 px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-100 focus:outline-none focus:border-emerald-600"
+          className="flex-1 px-3.5 py-2.5 rounded-[6px] bg-black border border-[#292d30] text-xs font-mono text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
         />
         <button
           onClick={() => void loadProfile(searchAddr)}
           disabled={loading}
-          className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-xs transition-colors disabled:opacity-50"
+          className="px-5 py-2.5 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-white font-medium text-xs font-mono transition-colors disabled:opacity-50"
         >
           {loading ? "Searching..." : "Lookup Agent"}
         </button>
       </div>
 
       {errorMsg && (
-        <p className="text-xs text-rose-400 font-mono">{errorMsg}</p>
+        <p className="text-xs text-[#ff9592] font-mono">{errorMsg}</p>
       )}
 
       {profile && (
-        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 sm:p-8 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-zinc-800">
+        <div className="rounded-[16px] border border-[#292d30] bg-[#0b0e14] p-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#292d30]">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-zinc-800 border border-zinc-700 text-emerald-400 flex items-center justify-center">
-                <BotIcon className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-[6px] bg-black border border-[#292d30] text-[#9281f7] flex items-center justify-center">
+                <BotIcon className="w-5 h-5" />
               </div>
               <div>
-                <span className="font-mono text-xs sm:text-sm text-zinc-200 font-semibold block truncate max-w-xs sm:max-w-md">
+                <span className="font-mono text-xs sm:text-sm text-white font-medium block truncate max-w-xs sm:max-w-md">
                   {profile.address}
                 </span>
-                <span className={`inline-block mt-1 text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${tierColor}`}>
+                <span className={`inline-block mt-1 text-[11px] font-mono px-2.5 py-0.5 rounded-[6px] border border-[#292d30] bg-black ${tierColor}`}>
                   {tierLabel}
                 </span>
               </div>
             </div>
 
-            <div className="text-right sm:border-l sm:border-zinc-800 sm:pl-6">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">
+            <div className="text-right sm:border-l sm:border-[#292d30] sm:pl-6">
+              <span className="text-[10px] text-[#6e727a] uppercase tracking-wider block font-mono">
                 Reliability Score
               </span>
-              <span className="text-3xl font-extrabold font-mono text-emerald-400">
+              <span className="text-3xl font-medium font-mono text-white">
                 {profile.reliability_score}
-                <span className="text-xs text-zinc-500 font-normal"> / 100</span>
+                <span className="text-xs text-[#6e727a] font-normal"> / 100</span>
               </span>
             </div>
           </div>
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-center">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Tasks Created</span>
-              <span className="text-xl font-bold font-mono text-zinc-100 mt-1 block">
+            <div className="p-4 rounded-[6px] bg-black border border-[#292d30] text-center">
+              <span className="text-[10px] text-[#6e727a] uppercase tracking-wider block font-mono">Tasks Created</span>
+              <span className="text-xl font-medium font-mono text-white mt-1 block">
                 {profile.tasks_created}
               </span>
             </div>
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-center">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Completed</span>
-              <span className="text-xl font-bold font-mono text-emerald-400 mt-1 block">
+            <div className="p-4 rounded-[6px] bg-black border border-[#292d30] text-center">
+              <span className="text-[10px] text-[#6e727a] uppercase tracking-wider block font-mono">Completed</span>
+              <span className="text-xl font-medium font-mono text-[#3ad389] mt-1 block">
                 {profile.tasks_completed}
               </span>
             </div>
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-center">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Disputes Won</span>
-              <span className="text-xl font-bold font-mono text-blue-400 mt-1 block">
+            <div className="p-4 rounded-[6px] bg-black border border-[#292d30] text-center">
+              <span className="text-[10px] text-[#6e727a] uppercase tracking-wider block font-mono">Disputes Won</span>
+              <span className="text-xl font-medium font-mono text-[#70b8ff] mt-1 block">
                 {profile.disputes_won}
               </span>
             </div>
-            <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800/80 text-center">
-              <span className="text-[10px] text-zinc-500 uppercase tracking-wider block">Disputes Lost</span>
-              <span className="text-xl font-bold font-mono text-rose-400 mt-1 block">
+            <div className="p-4 rounded-[6px] bg-black border border-[#292d30] text-center">
+              <span className="text-[10px] text-[#6e727a] uppercase tracking-wider block font-mono">Disputes Lost</span>
+              <span className="text-xl font-medium font-mono text-[#ff9592] mt-1 block">
                 {profile.disputes_lost}
               </span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800 flex items-center justify-between text-xs font-mono">
-            <span className="text-zinc-400">Cumulative Slashed Bonds Restitution:</span>
-            <span className="text-rose-400 font-semibold">{formatGen(profile.slashed_bonds)}</span>
+          <div className="p-4 rounded-[6px] bg-black border border-[#292d30] flex items-center justify-between text-xs font-mono">
+            <span className="text-[#a1a4a5]">Cumulative Slashed Bonds Restitution:</span>
+            <span className="text-[#ff9592] font-medium">{formatGen(profile.slashed_bonds)}</span>
           </div>
         </div>
       )}

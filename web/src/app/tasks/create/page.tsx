@@ -181,31 +181,31 @@ export default function CreateTaskPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-10">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-100">
+        <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-white">
           Create Task Agreement
         </h1>
-        <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-1 font-sans">
           Lock escrow reward and establish verifiable natural language SLA criteria for autonomous AI agent execution.
         </p>
       </div>
 
       {/* Preset Category Template Picker */}
-      <div className="p-4 rounded-2xl bg-zinc-900/60 border border-zinc-800 space-y-2.5">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 block">
+      <div className="p-6 rounded-[16px] bg-[#0b0e14] border border-[#292d30] space-y-3">
+        <span className="text-[11px] font-medium uppercase tracking-wider text-[#6e727a] block font-mono">
           Load Scenario Preset Template
         </span>
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {(Object.keys(TEMPLATES) as TaskCategory[]).map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => applyTemplate(cat)}
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors border ${
+              className={`px-3 py-1.5 rounded-[6px] text-xs font-mono transition-colors border ${
                 category === cat
-                  ? "bg-emerald-950/80 text-emerald-400 border-emerald-800"
-                  : "bg-zinc-800/60 text-zinc-400 border-zinc-700/60 hover:text-zinc-200"
+                  ? "bg-black text-[#9281f7] border-[#9281f7]/60"
+                  : "bg-black text-[#a1a4a5] border-[#292d30] hover:text-white"
               }`}
             >
               {cat}
@@ -216,27 +216,27 @@ export default function CreateTaskPage() {
 
       <form onSubmit={handleCreateTask} className="space-y-6">
         {/* Title */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-zinc-300">
-            Task Title <span className="text-rose-500">*</span>
+        <div className="space-y-2">
+          <label className="text-xs font-medium text-[#f0f0f0] block">
+            Task Title <span className="text-[#ff9592]">*</span>
           </label>
           <input
             type="text"
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-100 focus:outline-none focus:border-emerald-600 transition-colors"
+            className="w-full px-3.5 py-2.5 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] focus:outline-none focus:border-[#9281f7] transition-colors"
           />
         </div>
 
         {/* Expected Format & Review Timers */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">Expected Format</label>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">Expected Format</label>
             <select
               value={expectedFormat}
               onChange={(e) => setExpectedFormat(e.target.value as ExpectedFormat)}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             >
               <option value="json">JSON Schema Payload</option>
               <option value="https_api">Public HTTPS API Endpoint</option>
@@ -245,12 +245,12 @@ export default function CreateTaskPage() {
             </select>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">Delivery Deadline</label>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">Delivery Deadline</label>
             <select
               value={deadlineDays}
               onChange={(e) => setDeadlineDays(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             >
               <option value={3}>3 Days</option>
               <option value={7}>7 Days</option>
@@ -259,12 +259,12 @@ export default function CreateTaskPage() {
             </select>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">Review Window</label>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">Review Window</label>
             <select
               value={reviewWindowDays}
               onChange={(e) => setReviewWindowDays(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             >
               <option value={1}>24 Hours</option>
               <option value={3}>3 Days</option>
@@ -272,12 +272,12 @@ export default function CreateTaskPage() {
             </select>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">Defense Window</label>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">Defense Window</label>
             <select
               value={defenseWindowDays}
               onChange={(e) => setDefenseWindowDays(Number(e.target.value))}
-              className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             >
               <option value={1}>24 Hours</option>
               <option value={3}>3 Days</option>
@@ -287,85 +287,85 @@ export default function CreateTaskPage() {
         </div>
 
         {/* Live Dual-Timezone Confirmation Box */}
-        <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-3 text-xs">
-          <div className="flex items-center justify-between text-zinc-400 font-medium">
-            <span className="flex items-center gap-1.5">
-              <ClockIcon className="w-4 h-4 text-emerald-400" />
+        <div className="p-6 rounded-[16px] bg-[#0b0e14] border border-[#292d30] space-y-3.5 text-xs">
+          <div className="flex items-center justify-between text-[#a1a4a5] font-medium">
+            <span className="flex items-center gap-2">
+              <ClockIcon className="w-4 h-4 text-[#9281f7]" />
               <span>Deadline Timezone Synchronization Preview</span>
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono">
+            <span className="text-[10px] px-2 py-0.5 rounded-[6px] bg-black text-[#a1a4a5] border border-[#292d30] font-mono">
               {timezoneInfo.timezone}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-zinc-300">
-            <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
-              <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-0.5">Your Local Time ({timezoneInfo.timezone})</span>
-              <span className="font-mono text-zinc-200">{timezoneInfo.localString}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#f0f0f0]">
+            <div className="p-3 rounded-[6px] bg-black border border-[#292d30]">
+              <span className="text-[10px] uppercase font-mono text-[#6e727a] block mb-1">Your Local Time ({timezoneInfo.timezone})</span>
+              <span className="font-mono text-[#f0f0f0] text-xs">{timezoneInfo.localString}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
-              <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-0.5">Final On-Chain UTC Deadline</span>
-              <span className="font-mono text-emerald-400">{timezoneInfo.utcString}</span>
+            <div className="p-3 rounded-[6px] bg-black border border-[#292d30]">
+              <span className="text-[10px] uppercase font-mono text-[#6e727a] block mb-1">Final On-Chain UTC Deadline</span>
+              <span className="font-mono text-[#9281f7] text-xs">{timezoneInfo.utcString}</span>
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-[11px] text-zinc-500 pt-1 border-t border-zinc-800/60">
+          <div className="flex justify-between items-center text-[11px] text-[#6e727a] font-mono pt-2 border-t border-[#292d30]">
             <span>Allocated Duration: {deadlineDays} days ({deadlineDays * 24} hours from assignment)</span>
-            <span className="font-mono">Unix Epoch: {timezoneInfo.unixSeconds}</span>
+            <span>Unix Epoch: {timezoneInfo.unixSeconds}</span>
           </div>
         </div>
 
         {/* Natural Language SLA Specification */}
-        <div className="space-y-1.5">
-          <label className="text-xs font-medium text-zinc-300">
-            Service Level Agreement (SLA) Acceptance Criteria <span className="text-rose-500">*</span>
+        <div className="space-y-2">
+          <label className="text-xs font-medium text-[#f0f0f0] block">
+            Service Level Agreement (SLA) Acceptance Criteria <span className="text-[#ff9592]">*</span>
           </label>
           <textarea
             required
             rows={5}
             value={sla}
             onChange={(e) => setSla(e.target.value)}
-            className="w-full p-3 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-100 font-mono focus:outline-none focus:border-emerald-600 leading-relaxed"
+            className="w-full p-3.5 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] font-mono focus:outline-none focus:border-[#9281f7] leading-relaxed transition-colors"
           />
-          <p className="text-[11px] text-zinc-500 font-sans">
+          <p className="text-[11px] text-[#6e727a] font-sans">
             The AI Magistrate will independently decompose this text into distinct acceptance criteria during dispute consensus.
           </p>
         </div>
 
         {/* Double-Sided Collateral Fields */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-2xl bg-zinc-900/40 border border-zinc-800">
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">
-              Escrow Reward (GEN) <span className="text-rose-500">*</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-6 rounded-[16px] bg-[#0b0e14] border border-[#292d30]">
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">
+              Escrow Reward (GEN) <span className="text-[#ff9592]">*</span>
             </label>
             <input
               type="text"
               required
               value={escrowInput}
               onChange={(e) => setEscrowInput(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-zinc-950 border border-zinc-800 text-xs font-mono text-zinc-100 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3.5 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs font-mono text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             />
-            <p className="text-[10px] text-zinc-500">Locked in contract custody upon creation (min 0.01 GEN).</p>
+            <p className="text-[10px] text-[#6e727a] font-mono">Locked in contract custody upon creation (min 0.01 GEN).</p>
           </div>
 
-          <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300">
-              Required Worker Bond (GEN) <span className="text-rose-500">*</span>
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-[#f0f0f0] block">
+              Required Worker Bond (GEN) <span className="text-[#ff9592]">*</span>
             </label>
             <input
               type="text"
               required
               value={bondInput}
               onChange={(e) => setBondInput(e.target.value)}
-              className="w-full px-3.5 py-2 rounded-xl bg-zinc-950 border border-zinc-800 text-xs font-mono text-zinc-100 focus:outline-none focus:border-emerald-600"
+              className="w-full px-3.5 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs font-mono text-[#f0f0f0] focus:outline-none focus:border-[#9281f7]"
             />
-            <p className="text-[10px] text-zinc-500">Locked by worker agent upon accepting task (min 0.005 GEN).</p>
+            <p className="text-[10px] text-[#6e727a] font-mono">Locked by worker agent upon accepting task (min 0.005 GEN).</p>
           </div>
         </div>
 
         <button
           type="submit"
-          className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs tracking-wide transition-all shadow-md shadow-emerald-950/40"
+          className="w-full py-3 rounded-[6px] border border-[#292d30] hover:border-white bg-[#0b0e14] hover:bg-[#1a1f26] text-[#ffffff] font-medium text-xs tracking-wide transition-colors"
         >
           {isConnected ? `Lock Escrow & Publish Agreement (${escrowInput} GEN)` : "Connect Wallet to Publish"}
         </button>

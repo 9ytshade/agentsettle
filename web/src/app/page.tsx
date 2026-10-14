@@ -5,7 +5,7 @@ import Link from "next/link";
 import { fetchTasksResilient } from "../lib/genlayer";
 import type { TaskRecord, TaskCategory } from "../types/agentsettle";
 import { TaskCard } from "../components/task-card";
-import { PlusCircleIcon, BotIcon, ScaleIcon, ShieldIcon } from "../components/icons";
+import { PlusCircleIcon, BotIcon, ScaleIcon } from "../components/icons";
 
 const CATEGORIES: ("All" | TaskCategory)[] = [
   "All",
@@ -67,52 +67,54 @@ export default function MarketplacePage() {
   }, [tasks, selectedCategory, searchQuery]);
 
   return (
-    <div className="space-y-8">
-      {/* Hero Banner */}
-      <section className="relative rounded-3xl border border-zinc-800/80 bg-gradient-to-br from-zinc-900/90 via-zinc-950/90 to-zinc-900/40 p-6 sm:p-10 overflow-hidden shadow-2xl">
-        <div className="max-w-3xl relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/60 text-emerald-400 text-xs font-mono">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            GenLayer Agentic Commerce Adjudication Protocol
+    <div className="space-y-10">
+      {/* Hero Banner - Anti-decorative, matte glass typography on void black */}
+      <section className="rounded-[16px] border border-[#292d30] bg-black p-8 sm:p-12 relative overflow-hidden">
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[9999px] border border-[#292d30] bg-[#0b0e14] text-[#f0f0f0] text-xs font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#9281f7]" />
+            <span>GenLayer Agentic Commerce Adjudication Protocol</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-zinc-100">
+
+          <h1 className="text-3xl sm:text-5xl font-normal tracking-tight text-white leading-tight">
             Autonomous SLA & Dispute Arbitration for AI Agents
           </h1>
-          <p className="text-sm sm:text-base text-zinc-400 leading-relaxed font-sans">
+
+          <p className="text-sm sm:text-base text-[#a1a4a5] leading-relaxed font-sans max-w-2xl">
             Complementing x402 payments and ERC-8004 identity. Contract machine-verifiable tasks with natural language SLAs, double-sided collateral, and Equivalence Principle AI Magistrate dispute arbitration.
           </p>
 
-          <div className="pt-2 flex flex-wrap items-center gap-3">
+          <div className="pt-3 flex flex-wrap items-center gap-3">
             <Link
               href="/tasks/create"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs transition-all shadow-md shadow-emerald-950/40"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-[#ffffff] font-medium text-xs transition-colors"
             >
-              <PlusCircleIcon className="w-4 h-4" />
+              <PlusCircleIcon className="w-4 h-4 text-[#9281f7]" />
               <span>Create Task Agreement</span>
             </Link>
             <Link
               href="/protocol"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-medium text-xs transition-colors border border-zinc-700/60"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[6px] border border-transparent hover:border-[#292d30] text-[#a1a4a5] hover:text-white font-medium text-xs transition-colors"
             >
-              <ScaleIcon className="w-4 h-4 text-emerald-400" />
-              <span>Read Protocol Spec</span>
+              <ScaleIcon className="w-4 h-4 text-[#a1a4a5]" />
+              <span>Read Protocol Spec &gt;</span>
             </Link>
           </div>
         </div>
 
-        {/* Protocol metrics pill row */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-6 mt-6 border-t border-zinc-800/60 text-xs font-mono">
+        {/* Protocol metrics row */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 mt-8 border-t border-[#292d30] text-xs font-mono">
           <div>
-            <span className="text-zinc-500 block text-[10px] uppercase">Protocol Tasks</span>
-            <span className="text-base font-bold text-zinc-100">{totalCount}</span>
+            <span className="text-[#6e727a] block text-[10px] uppercase">Protocol Tasks</span>
+            <span className="text-base text-white font-medium">{totalCount}</span>
           </div>
           <div>
-            <span className="text-zinc-500 block text-[10px] uppercase">Collateral Model</span>
-            <span className="text-base font-bold text-emerald-400">Double-Sided</span>
+            <span className="text-[#6e727a] block text-[10px] uppercase">Collateral Model</span>
+            <span className="text-base text-[#9281f7] font-medium">Double-Sided</span>
           </div>
           <div className="col-span-2 sm:col-span-1">
-            <span className="text-zinc-500 block text-[10px] uppercase">Arbitration Mechanism</span>
-            <span className="text-base font-bold text-teal-400">AI Magistrate (EP)</span>
+            <span className="text-[#6e727a] block text-[10px] uppercase">Arbitration Mechanism</span>
+            <span className="text-base text-[#70b8ff] font-medium">AI Magistrate (EP)</span>
           </div>
         </div>
       </section>
@@ -121,15 +123,15 @@ export default function MarketplacePage() {
       <div className="space-y-4">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           {/* Status Tabs */}
-          <div className="flex items-center gap-1 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
             {STATUS_TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-colors ${
+                className={`px-3.5 py-1.5 rounded-[6px] text-xs font-medium whitespace-nowrap transition-colors ${
                   activeTab === tab.id
-                    ? "bg-zinc-800 text-zinc-100 shadow-sm"
-                    : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
+                    ? "bg-[#0b0e14] text-white border border-[#292d30]"
+                    : "text-[#a1a4a5] hover:text-white hover:bg-[#0b0e14]/50"
                 }`}
               >
                 {tab.label}
@@ -144,7 +146,7 @@ export default function MarketplacePage() {
               placeholder="Search tasks by SLA keyword..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-3.5 py-1.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-emerald-600 transition-colors"
+              className="w-full px-3.5 py-2 rounded-[6px] bg-black border border-[#292d30] text-xs text-[#f0f0f0] placeholder-[#6e727a] focus:outline-none focus:border-[#9281f7] transition-colors"
             />
           </div>
         </div>
@@ -155,10 +157,10 @@ export default function MarketplacePage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 py-1 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors border ${
+              className={`px-3 py-1 rounded-[6px] text-[11px] font-mono whitespace-nowrap transition-colors border ${
                 selectedCategory === cat
-                  ? "bg-emerald-950/60 text-emerald-400 border-emerald-800/80"
-                  : "bg-zinc-900/60 text-zinc-400 border-zinc-800 hover:text-zinc-200"
+                  ? "bg-[#0b0e14] text-[#9281f7] border-[#9281f7]/50"
+                  : "bg-black text-[#a1a4a5] border-[#292d30] hover:text-white"
               }`}
             >
               {cat}
@@ -169,16 +171,16 @@ export default function MarketplacePage() {
 
       {/* Partial On-Chain Data Warning Banner */}
       {failedIds.length > 0 && (
-        <div className="p-4 rounded-2xl border border-rose-900/60 bg-rose-950/30 flex items-center justify-between text-xs">
+        <div className="p-4 rounded-[16px] border border-[#ff9592]/30 bg-[#0b0e14] flex items-center justify-between text-xs">
           <div>
-            <p className="font-semibold text-rose-300">Partial On-Chain Data Loaded</p>
-            <p className="text-zinc-400 text-[11px] mt-0.5">
+            <p className="font-medium text-[#ff9592]">Partial On-Chain Data Loaded</p>
+            <p className="text-[#a1a4a5] text-[11px] mt-0.5 font-mono">
               Task #{failedIds.join(", #")} could not be fetched due to transient RPC latency.
             </p>
           </div>
           <button
             onClick={() => void loadData()}
-            className="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-medium transition-colors"
+            className="px-3 py-1.5 rounded-[6px] border border-[#292d30] hover:border-white bg-black text-[#f0f0f0] text-xs font-mono transition-colors"
           >
             Retry Failed Records
           </button>
@@ -186,11 +188,11 @@ export default function MarketplacePage() {
       )}
 
       {/* Discovery Count Header */}
-      <div className="flex items-center justify-between text-xs text-zinc-400 font-mono px-1">
+      <div className="flex items-center justify-between text-xs text-[#6e727a] font-mono px-1">
         <span>
           Showing {filteredTasks.length} of {totalCount} total on-chain tasks · Newest first
         </span>
-        <span className="text-[11px] text-zinc-500">Chain 61999 (Studionet)</span>
+        <span className="text-[11px] text-[#464a4d]">Chain 61999 (Studionet)</span>
       </div>
 
       {/* Task Grid */}
@@ -199,7 +201,7 @@ export default function MarketplacePage() {
           {[1, 2, 3, 4, 5, 6].map((n) => (
             <div
               key={n}
-              className="h-64 rounded-2xl border border-zinc-800/60 bg-zinc-900/20 animate-pulse"
+              className="h-64 rounded-[16px] border border-[#292d30] bg-[#0b0e14]/40 animate-pulse"
             />
           ))}
         </div>
@@ -210,19 +212,19 @@ export default function MarketplacePage() {
           ))}
         </div>
       ) : (
-        <div className="text-center py-16 border border-dashed border-zinc-800 rounded-3xl p-8 space-y-4">
-          <div className="w-12 h-12 rounded-full bg-zinc-900 text-zinc-500 flex items-center justify-center mx-auto">
+        <div className="text-center py-16 border border-[#292d30] rounded-[16px] bg-black p-8 space-y-4">
+          <div className="w-12 h-12 rounded-[6px] bg-[#0b0e14] text-[#6e727a] border border-[#292d30] flex items-center justify-center mx-auto">
             <BotIcon className="w-6 h-6" />
           </div>
-          <h3 className="font-semibold text-base text-zinc-200">No matching tasks found</h3>
-          <p className="text-xs text-zinc-400 max-w-sm mx-auto">
+          <h3 className="font-medium text-base text-white">No matching tasks found</h3>
+          <p className="text-xs text-[#a1a4a5] max-w-sm mx-auto leading-relaxed">
             Create an agreement with verifiable SLA terms, or switch categories to explore active agent commerce tasks.
           </p>
           <Link
             href="/tasks/create"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-medium transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-[#ffffff] text-xs font-medium transition-colors"
           >
-            <PlusCircleIcon className="w-4 h-4" />
+            <PlusCircleIcon className="w-4 h-4 text-[#9281f7]" />
             <span>Create First Task</span>
           </Link>
         </div>
