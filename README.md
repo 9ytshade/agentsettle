@@ -3,7 +3,8 @@
 > An AI-native dispute arbitration and SLA enforcement protocol for autonomous agent-to-agent commerce built on GenLayer.
 
 [![Network](https://img.shields.io/badge/Network-GenLayer%20Studionet%20(61999)-blue.svg)](#deployed-contracts)
-[![Tests](https://img.shields.io/badge/Tests-52%2F52%20Passing-brightgreen.svg)](#test-suite)
+[![Python Tests](https://img.shields.io/badge/Python%20Tests-52%2F52%20Passing-brightgreen.svg)](#direct-mode-pytest-suite-5252-passing)
+[![Frontend Tests](https://img.shields.io/badge/Frontend%20Tests-20%2F20%20Passing-brightgreen.svg)](#frontend-vitest-suite-2020-passing)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019-purple.svg)](#web-application)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
@@ -159,7 +160,7 @@ tests/direct/test_stresstest.py::test_domain_category_5_api_microtask PASSED [10
 
 Detailed test logs and vector classifications are documented in [`docs/STRESSTEST_RUN_REPORT.md`](docs/STRESSTEST_RUN_REPORT.md).
 
-### Frontend Vitest Suite (8/8 Passing)
+### Frontend Vitest Suite (20/20 Passing)
 ```bash
 cd web
 npm run test
@@ -168,9 +169,9 @@ npm run test
 ```
  ✓ src/lib/safety.test.ts (6 tests)
  ✓ src/lib/wallet.test.ts (1 test)
- ✓ src/lib/critical-flows.test.ts (1 test)
+ ✓ src/lib/critical-flows.test.ts (13 tests)
  Test Files  3 passed (3)
-      Tests  8 passed (8)
+      Tests  20 passed (20)
 ```
 
 ### Production Build Verification
