@@ -119,6 +119,61 @@ export async function fetchTasksByStatus(
   }
 }
 
+export interface ResilientDiscoveryResult {
+  tasks: TaskRecord[];
+  failedIds: number[];
+  totalCount: number;
+}
+
+export async function fetchTasksResilient(
+  status: string,
+  offset = 0,
+  limit = 50
+): Promise<ResilientDiscoveryResult> {
+  const client = getReadClient();
+  const totalCount = await fetchTotalTasks();
+
+  try {
+    const list = (await client.readContract({
+      address: CONTRACT_ADDRESS,
+      functionName: "get_tasks_by_status",
+      args: [status, offset, limit],
+    })) as Record<string, unknown>[];
+    if (Array.isArray(list)) {
+      return {
+        tasks: list.map(normalizeTask),
+        failedIds: [],
+        totalCount,
+      };
+    }
+  } catch (err) {
+    console.warn("Bulk get_tasks_by_status failed, attempting individual discovery:", err);
+  }
+
+  // Fallback: Individual ID fetching with failedIds tracking
+  const tasks: TaskRecord[] = [];
+  const failedIds: number[] = [];
+  const startId = Math.max(1, totalCount - offset);
+  const endId = Math.max(1, startId - limit + 1);
+
+  for (let i = startId; i >= endId; i--) {
+    try {
+      const task = await fetchTask(i);
+      if (task) {
+        if (status === "all" || task.status === status) {
+          tasks.push(task);
+        }
+      } else {
+        failedIds.push(i);
+      }
+    } catch {
+      failedIds.push(i);
+    }
+  }
+
+  return { tasks, failedIds, totalCount };
+}
+
 export async function fetchDispute(taskId: number): Promise<DisputeRecord | null> {
   const client = getReadClient();
   try {

@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "../../../lib/use-wallet";
 import { parseGenToWei, formatGen } from "../../../lib/safety";
 import { CONTRACT_ADDRESS } from "../../../lib/genlayer";
 import { pollTransactionUntilFinalized } from "../../../lib/tx-waiter";
 import { TransactionLifecycle } from "../../../components/transaction-lifecycle";
+import { ClockIcon } from "../../../components/icons";
 import type { TaskCategory, ExpectedFormat } from "../../../types/agentsettle";
 
 const TEMPLATES: Record<
@@ -74,8 +75,23 @@ export default function CreateTaskPage() {
   const [expectedFormat, setExpectedFormat] = useState<ExpectedFormat>(TEMPLATES["Data Scraping"].format);
   const [escrowInput, setEscrowInput] = useState(TEMPLATES["Data Scraping"].defaultEscrow);
   const [bondInput, setBondInput] = useState(TEMPLATES["Data Scraping"].defaultBond);
+  const [deadlineDays, setDeadlineDays] = useState(7);
   const [reviewWindowDays, setReviewWindowDays] = useState(1);
   const [defenseWindowDays, setDefenseWindowDays] = useState(1);
+
+  const timezoneInfo = useMemo(() => {
+    const tz =
+      typeof Intl !== "undefined"
+        ? Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"
+        : "UTC";
+    const targetDate = new Date(Date.now() + deadlineDays * 86_400 * 1000);
+    return {
+      timezone: tz,
+      unixSeconds: Math.floor(targetDate.getTime() / 1000),
+      utcString: targetDate.toUTCString(),
+      localString: targetDate.toLocaleString(),
+    };
+  }, [deadlineDays]);
 
   const [txState, setTxState] = useState<{
     status: "idle" | "broadcasting" | "polling" | "success" | "error";
@@ -127,7 +143,7 @@ export default function CreateTaskPage() {
       const signerClient = getSignerClient();
       if (!signerClient) throw new Error("No signer available");
 
-      const deadlineSec = 86_400 * 7; // 7 days deadline
+      const deadlineSec = 86_400 * deadlineDays; // Dynamic deadline duration
       const reviewWinSec = reviewWindowDays * 86_400;
       const defenseWinSec = defenseWindowDays * 86_400;
 
@@ -214,7 +230,7 @@ export default function CreateTaskPage() {
         </div>
 
         {/* Expected Format & Review Timers */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-zinc-300">Expected Format</label>
             <select
@@ -226,6 +242,20 @@ export default function CreateTaskPage() {
               <option value="https_api">Public HTTPS API Endpoint</option>
               <option value="github_commit">GitHub Commit SHA</option>
               <option value="raw_text">Raw Text / Markdown</option>
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-zinc-300">Delivery Deadline</label>
+            <select
+              value={deadlineDays}
+              onChange={(e) => setDeadlineDays(Number(e.target.value))}
+              className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-xs text-zinc-200 focus:outline-none focus:border-emerald-600"
+            >
+              <option value={3}>3 Days</option>
+              <option value={7}>7 Days</option>
+              <option value={14}>14 Days</option>
+              <option value={30}>30 Days</option>
             </select>
           </div>
 
@@ -253,6 +283,35 @@ export default function CreateTaskPage() {
               <option value={3}>3 Days</option>
               <option value={7}>7 Days</option>
             </select>
+          </div>
+        </div>
+
+        {/* Live Dual-Timezone Confirmation Box */}
+        <div className="p-4 rounded-2xl bg-zinc-950/80 border border-zinc-800/80 space-y-3 text-xs">
+          <div className="flex items-center justify-between text-zinc-400 font-medium">
+            <span className="flex items-center gap-1.5">
+              <ClockIcon className="w-4 h-4 text-emerald-400" />
+              <span>Deadline Timezone Synchronization Preview</span>
+            </span>
+            <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono">
+              {timezoneInfo.timezone}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-zinc-300">
+            <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
+              <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-0.5">Your Local Time ({timezoneInfo.timezone})</span>
+              <span className="font-mono text-zinc-200">{timezoneInfo.localString}</span>
+            </div>
+            <div className="p-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800/60">
+              <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-0.5">Final On-Chain UTC Deadline</span>
+              <span className="font-mono text-emerald-400">{timezoneInfo.utcString}</span>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center text-[11px] text-zinc-500 pt-1 border-t border-zinc-800/60">
+            <span>Allocated Duration: {deadlineDays} days ({deadlineDays * 24} hours from assignment)</span>
+            <span className="font-mono">Unix Epoch: {timezoneInfo.unixSeconds}</span>
           </div>
         </div>
 

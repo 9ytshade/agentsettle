@@ -22,6 +22,19 @@ export function formatGen(wei: bigint | string | number): string {
   }
 }
 
+export function formatWeiToGen(wei: bigint | string | number): string {
+  try {
+    const b = BigInt(wei);
+    const whole = b / 10n ** 18n;
+    const rem = b % 10n ** 18n;
+    if (rem === 0n) return whole.toString();
+    const decimals = rem.toString().padStart(18, "0").replace(/0+$/, "");
+    return `${whole}.${decimals}`;
+  } catch {
+    return "0";
+  }
+}
+
 export function parseGenToWei(genStr: string): bigint {
   const clean = genStr.trim();
   if (!clean || isNaN(Number(clean))) return 0n;

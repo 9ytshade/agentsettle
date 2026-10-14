@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { fetchTasksByStatus, fetchTotalTasks } from "../lib/genlayer";
+import { fetchTasksResilient } from "../lib/genlayer";
 import type { TaskRecord, TaskCategory } from "../types/agentsettle";
 import { TaskCard } from "../components/task-card";
 import { PlusCircleIcon, BotIcon, ScaleIcon, ShieldIcon } from "../components/icons";
@@ -29,36 +29,30 @@ const STATUS_TABS = [
 
 export default function MarketplacePage() {
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
+  const [failedIds, setFailedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [totalCount, setTotalCount] = useState(0);
 
-  useEffect(() => {
-    let isMounted = true;
-    async function loadData() {
-      setLoading(true);
-      try {
-        const [loadedTasks, total] = await Promise.all([
-          fetchTasksByStatus(activeTab, 0, 50),
-          fetchTotalTasks(),
-        ]);
-        if (isMounted) {
-          setTasks(loadedTasks);
-          setTotalCount(total);
-        }
-      } catch (err) {
-        console.error("Failed loading marketplace tasks:", err);
-      } finally {
-        if (isMounted) setLoading(false);
-      }
+  const loadData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetchTasksResilient(activeTab, 0, 50);
+      setTasks(res.tasks);
+      setFailedIds(res.failedIds);
+      setTotalCount(res.totalCount);
+    } catch (err) {
+      console.error("Failed loading marketplace tasks:", err);
+    } finally {
+      setLoading(false);
     }
-    void loadData();
-    return () => {
-      isMounted = false;
-    };
   }, [activeTab]);
+
+  useEffect(() => {
+    void loadData();
+  }, [loadData]);
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((t) => {
@@ -171,6 +165,32 @@ export default function MarketplacePage() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Partial On-Chain Data Warning Banner */}
+      {failedIds.length > 0 && (
+        <div className="p-4 rounded-2xl border border-rose-900/60 bg-rose-950/30 flex items-center justify-between text-xs">
+          <div>
+            <p className="font-semibold text-rose-300">Partial On-Chain Data Loaded</p>
+            <p className="text-zinc-400 text-[11px] mt-0.5">
+              Task #{failedIds.join(", #")} could not be fetched due to transient RPC latency.
+            </p>
+          </div>
+          <button
+            onClick={() => void loadData()}
+            className="px-3 py-1.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 border border-zinc-700 text-xs font-medium transition-colors"
+          >
+            Retry Failed Records
+          </button>
+        </div>
+      )}
+
+      {/* Discovery Count Header */}
+      <div className="flex items-center justify-between text-xs text-zinc-400 font-mono px-1">
+        <span>
+          Showing {filteredTasks.length} of {totalCount} total on-chain tasks · Newest first
+        </span>
+        <span className="text-[11px] text-zinc-500">Chain 61999 (Studionet)</span>
       </div>
 
       {/* Task Grid */}
