@@ -23,8 +23,18 @@ export function TransactionLifecycle({
   const explorerUrl = hash ? `https://explorer-studio.genlayer.com/tx/${hash}` : null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000000f2] backdrop-blur-[25px] animate-fade-in">
-      <div className="w-full max-w-md rounded-[16px] border border-[#292d30] bg-black p-6">
+    <div
+      onClick={() => {
+        if (status !== "broadcasting" && status !== "polling" && onClose) {
+          onClose();
+        }
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-md rounded-[16px] border border-[#292d30] bg-[#0b0e14] p-6 shadow-2xl"
+      >
         <div className="flex items-start justify-between mb-4">
           <h3 className="font-medium text-base text-white">{actionName}</h3>
           {status !== "broadcasting" && status !== "polling" && onClose && (

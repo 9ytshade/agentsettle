@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import type { TaskRecord } from "../types/agentsettle";
-import { formatAddress, formatGen, formatDate, formatTimeRemaining } from "../lib/safety";
+import { formatAddress, formatGen, formatTimeRemaining } from "../lib/safety";
 import { ExternalLinkIcon } from "./icons";
 
 interface TaskPreviewModalProps {
@@ -45,17 +45,23 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000000f2] backdrop-blur-[25px] animate-fade-in">
-      <div className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-[16px] border border-[#292d30] bg-black p-6 sm:p-8 overflow-hidden shadow-2xl">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-2xl max-h-[90vh] flex flex-col rounded-[16px] border border-[#292d30] bg-[#0b0e14] p-6 sm:p-8 overflow-hidden shadow-2xl"
+      >
         {/* Header */}
         <div className="flex items-start justify-between gap-4 pb-4 border-b border-[#292d30]">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="font-mono text-xs text-[#6e727a]">Task #{task.id}</span>
-              <span className="text-[11px] px-2 py-0.5 rounded-[6px] bg-[#0b0e14] text-[#a1a4a5] border border-[#292d30] font-mono">
+              <span className="text-[11px] px-2 py-0.5 rounded-[6px] bg-black text-[#a1a4a5] border border-[#292d30] font-mono">
                 {task.category}
               </span>
-              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-[11px] font-mono text-[#f0f0f0]">
+              <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-[6px] bg-black border border-[#292d30] text-[11px] font-mono text-[#f0f0f0]">
                 <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dotColor}`} />
                 <span>{statusInfo.label}</span>
               </div>
@@ -76,19 +82,19 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
         <div className="flex-1 overflow-y-auto py-5 space-y-6 pr-1 scrollbar-none">
           {/* Financial Collateral Breakdown */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase font-mono block">Escrow Reward</span>
               <span className="font-mono text-white text-sm font-medium mt-0.5 block">{formatGen(task.escrow_amount)}</span>
             </div>
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase font-mono block">Worker Bond</span>
               <span className="font-mono text-[#a1a4a5] text-sm mt-0.5 block">{formatGen(task.worker_bond)}</span>
             </div>
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase font-mono block">Delivery Deadline</span>
               <span className="font-mono text-[#9281f7] text-xs mt-0.5 block">{formatTimeRemaining(task.deadline)}</span>
             </div>
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase font-mono block">Deliverable Format</span>
               <span className="font-mono text-[#f0f0f0] text-xs mt-0.5 block">{task.expected_format}</span>
             </div>
@@ -108,18 +114,18 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
                 {copied ? "Copied" : "Copy SLA"}
               </button>
             </div>
-            <div className="p-4 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-xs font-mono text-[#f0f0f0] leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
+            <div className="p-4 rounded-[6px] bg-black border border-[#292d30] text-xs font-mono text-[#f0f0f0] leading-relaxed whitespace-pre-wrap max-h-48 overflow-y-auto">
               {task.sla_specification}
             </div>
           </div>
 
           {/* Counterparties */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase block mb-1">Hiring Client Address</span>
               <span className="text-[#f0f0f0] truncate block">{task.creator}</span>
             </div>
-            <div className="p-3.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30]">
+            <div className="p-3.5 rounded-[6px] bg-black border border-[#292d30]">
               <span className="text-[10px] text-[#6e727a] uppercase block mb-1">Assigned Worker Address</span>
               <span className="text-[#f0f0f0] truncate block">
                 {task.worker !== "0x0000000000000000000000000000000000000000" ? task.worker : "Unassigned (Open)"}
@@ -129,7 +135,7 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
 
           {/* Evidence Preview if submitted */}
           {(task.deliverable_url || task.artifact_payload) && (
-            <div className="space-y-2 p-4 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-xs">
+            <div className="space-y-2 p-4 rounded-[6px] bg-black border border-[#292d30] text-xs">
               <span className="text-[10px] text-[#6e727a] uppercase font-mono block">Submitted Evidence</span>
               {task.deliverable_url && (
                 <div className="flex items-center justify-between font-mono pt-1">
@@ -146,7 +152,7 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
                 </div>
               )}
               {task.artifact_payload && (
-                <pre className="p-2.5 rounded-[6px] bg-black border border-[#292d30] text-[11px] font-mono text-[#a1a4a5] max-h-24 overflow-y-auto whitespace-pre-wrap mt-2">
+                <pre className="p-2.5 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-[11px] font-mono text-[#a1a4a5] max-h-24 overflow-y-auto whitespace-pre-wrap mt-2">
                   {task.artifact_payload}
                 </pre>
               )}
@@ -164,7 +170,7 @@ export function TaskPreviewModal({ task, isOpen, onClose }: TaskPreviewModalProp
           </button>
           <Link
             href={`/tasks/${task.id}`}
-            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-[6px] border border-[#292d30] hover:border-white bg-[#0b0e14] hover:bg-[#1a1f26] text-white text-xs font-medium transition-colors"
+            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-[6px] border border-[#292d30] hover:border-white bg-black hover:bg-[#1a1f26] text-white text-xs font-medium transition-colors"
           >
             <span>Enter Full Workstation</span>
             <span className="text-[#9281f7]">→</span>

@@ -36,8 +36,14 @@ export function AdjudicationModal({
   const clientPercent = ((10000 - workerBps) / 100).toFixed(1);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000000f2] backdrop-blur-[25px] animate-fade-in">
-      <div className="w-full max-w-xl rounded-[16px] border border-[#292d30] bg-black p-6 sm:p-8 overflow-hidden">
+    <div
+      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-fade-in"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-xl rounded-[16px] border border-[#292d30] bg-[#0b0e14] p-6 sm:p-8 overflow-hidden"
+      >
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-[#9281f7] flex items-center justify-center">
