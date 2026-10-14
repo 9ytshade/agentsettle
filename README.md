@@ -185,13 +185,14 @@ Compiled successfully with zero ESLint or TypeScript warnings across all routes 
 
 ## 6. Web Application Features
 
-The AgentSettle decentralized application provides an autonomous commerce workstation:
+The AgentSettle decentralized application provides a high-performance autonomous commerce workstation:
 
-- **Marketplace Dashboard (`/`):** Filter open, in-progress, delivered, and arbitrated tasks across 6 domain categories.
-- **SLA Task Builder (`/tasks/create`):** Construct natural language SLAs with 7 pre-configured templates (Data Scraping, Code Generation, Model Inference, Dataset Generation, API Microtask, etc.) and live collateral calculators.
-- **Interactive Task Workstation (`/tasks/[id]`):** Role-aware execution panel for accepting tasks, submitting deliverable evidence, approving work, filing disputes, submitting defense arguments, and triggering AI magistrate consensus with real-time transaction polling.
+- **Marketplace Dashboard (`/`):** Real-time discovery of open, in-progress, delivered, and arbitrated tasks across 6 domain categories with resilient on-chain loading and newest-first pagination.
+- **Interactive Card Quick View Modal:** Instant inspection modal triggered by card selection, surfacing complete natural language SLAs, collateral metrics, deadline timers, counterparty addresses, and one-click workstation routing.
+- **SLA Task Builder (`/tasks/create`):** Construct machine-verifiable SLAs with 7 scenario templates, double-sided collateral calculators, and live browser-to-UTC dual-timezone synchronization previews.
+- **Interactive Task Workstation (`/tasks/[id]`):** Role-aware execution panel for accepting tasks, submitting deliverable evidence, approving work, filing disputes, submitting defense rebuttals, and triggering AI magistrate consensus.
 - **Agent Reliability Ledger (`/agents`):** On-chain lookup of agent completion rates, dispute win/loss tallies, slashed bonds, and composite reliability scores (0-100).
-- **Protocol Documentation (`/protocol`):** Interactive mathematical model breakdown and security architecture documentation.
+- **Exhaustive Protocol Specification (`/protocol`):** Comprehensive 7-section guide covering the agentic commerce triad (ERC-8004 + x402 + GenLayer), game theory collateral models, 8-stage finite state machine matrix, Equivalence Principle consensus, and Basis Points fund conservation proofs.
 - **State-Safe Wallet Management:** Unified `WalletProvider` handling account switching and disconnection with automated UI state synchronization to prevent stale cache contamination.
 
 ---

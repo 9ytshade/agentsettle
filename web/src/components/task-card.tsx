@@ -7,6 +7,7 @@ import { formatAddress, formatGen } from "../lib/safety";
 
 interface TaskCardProps {
   task: TaskRecord;
+  onSelect?: (task: TaskRecord) => void;
 }
 
 const STATUS_CONFIG: Record<
@@ -23,14 +24,24 @@ const STATUS_CONFIG: Record<
   cancelled: { label: "Cancelled", dotColor: "bg-[#6e727a]" },
 };
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onSelect }: TaskCardProps) {
   const statusInfo = STATUS_CONFIG[task.status] || {
     label: task.status,
     dotColor: "bg-[#a1a4a5]",
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // If user clicked directly on a link or button, don't intercept
+    const target = e.target as HTMLElement;
+    if (target.closest("a") || target.closest("button")) return;
+    if (onSelect) onSelect(task);
+  };
+
   return (
-    <div className="rounded-[16px] border border-[#292d30] bg-black hover:border-[#6e727a] transition-all duration-150 ease-out p-6 flex flex-col justify-between group">
+    <div
+      onClick={handleCardClick}
+      className="rounded-[16px] border border-[#292d30] bg-black hover:border-[#6e727a] transition-all duration-150 ease-out p-6 flex flex-col justify-between group cursor-pointer"
+    >
       <div>
         <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-2">
@@ -45,7 +56,10 @@ export function TaskCard({ task }: TaskCardProps) {
           </div>
         </div>
 
-        <h3 className="font-medium text-base text-white group-hover:text-[#9281f7] transition-colors line-clamp-1 mb-2">
+        <h3
+          onClick={() => onSelect && onSelect(task)}
+          className="font-medium text-base text-white group-hover:text-[#9281f7] transition-colors line-clamp-1 mb-2 hover:underline decoration-[#9281f7]/40"
+        >
           {task.title}
         </h3>
 
@@ -71,13 +85,26 @@ export function TaskCard({ task }: TaskCardProps) {
           <span>Format: <span className="text-[#a1a4a5]">{task.expected_format}</span></span>
         </div>
 
-        <Link
-          href={`/tasks/${task.id}`}
-          className="w-full py-2 px-3 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-[#ffffff] font-medium text-xs text-center flex items-center justify-center gap-1.5 transition-colors"
-        >
-          <span>Open Workstation</span>
-          <span className="text-[#9281f7] group-hover:translate-x-0.5 transition-transform">→</span>
-        </Link>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onSelect) onSelect(task);
+            }}
+            className="py-2 px-3 rounded-[6px] border border-[#292d30] hover:border-white bg-[#0b0e14] text-[#f0f0f0] font-medium text-xs text-center transition-colors font-mono"
+          >
+            Quick View
+          </button>
+          <Link
+            href={`/tasks/${task.id}`}
+            onClick={(e) => e.stopPropagation()}
+            className="py-2 px-3 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-[#ffffff] font-medium text-xs text-center flex items-center justify-center gap-1 transition-colors"
+          >
+            <span>Workstation</span>
+            <span className="text-[#9281f7] group-hover:translate-x-0.5 transition-transform">→</span>
+          </Link>
+        </div>
       </div>
     </div>
   );

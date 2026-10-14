@@ -5,6 +5,7 @@ import Link from "next/link";
 import { fetchTasksResilient } from "../lib/genlayer";
 import type { TaskRecord, TaskCategory } from "../types/agentsettle";
 import { TaskCard } from "../components/task-card";
+import { TaskPreviewModal } from "../components/task-preview-modal";
 import { PlusCircleIcon, BotIcon, ScaleIcon } from "../components/icons";
 
 const CATEGORIES: ("All" | TaskCategory)[] = [
@@ -35,6 +36,7 @@ export default function MarketplacePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [totalCount, setTotalCount] = useState(0);
+  const [selectedTask, setSelectedTask] = useState<TaskRecord | null>(null);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -208,7 +210,11 @@ export default function MarketplacePage() {
       ) : filteredTasks.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              onSelect={(t) => setSelectedTask(t)}
+            />
           ))}
         </div>
       ) : (
@@ -229,6 +235,13 @@ export default function MarketplacePage() {
           </Link>
         </div>
       )}
+
+      {/* Task Preview Modal for Quick View */}
+      <TaskPreviewModal
+        task={selectedTask}
+        isOpen={!!selectedTask}
+        onClose={() => setSelectedTask(null)}
+      />
     </div>
   );
 }
