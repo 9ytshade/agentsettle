@@ -3,6 +3,8 @@ import {
   sanitizeText,
   formatAddress,
   formatGen,
+  formatCompactGen,
+  formatCommaGen,
   parseGenToWei,
   validatePublicHttpsUrl,
   formatTimeRemaining,
@@ -26,6 +28,19 @@ describe("safety utilities", () => {
     expect(formatGen(50000000000000000n)).toBe("0.0500 GEN");
     expect(formatGen(0n)).toBe("0.0000 GEN");
   });
+
+  it("formats compact GEN balances cleanly", () => {
+    expect(formatCompactGen("0.0500 GEN")).toBe("0.05 GEN");
+    expect(formatCompactGen("1250.5000 GEN")).toBe("1.25k GEN");
+    expect(formatCompactGen("2500000.0000 GEN")).toBe("2.50M GEN");
+    expect(formatCompactGen("10000000199979660.9000 GEN")).toBe("10.00P GEN");
+  });
+
+  it("formats comma-separated detailed GEN balances", () => {
+    expect(formatCommaGen("10000000199979660.9000 GEN")).toBe("10,000,000,199,979,660.9000 GEN");
+    expect(formatCommaGen("1250.5000 GEN")).toBe("1,250.5000 GEN");
+  });
+
 
   it("parses GEN to wei correctly", () => {
     expect(parseGenToWei("1.0")).toBe(10n ** 18n);

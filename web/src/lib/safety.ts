@@ -22,6 +22,42 @@ export function formatGen(wei: bigint | string | number): string {
   }
 }
 
+export function formatCompactGen(balanceStr: string): string {
+  if (!balanceStr) return "0.00 GEN";
+  const clean = balanceStr.replace(/ GEN$/i, "").trim();
+  const num = parseFloat(clean);
+  if (isNaN(num)) return balanceStr;
+  if (num === 0) return "0.00 GEN";
+  if (num < 0.0001) return "<0.0001 GEN";
+  if (num < 1000) {
+    return `${Number(num.toFixed(2))} GEN`;
+  }
+  if (num < 1_000_000) {
+    return `${(num / 1_000).toFixed(2)}k GEN`;
+  }
+  if (num < 1_000_000_000) {
+    return `${(num / 1_000_000).toFixed(2)}M GEN`;
+  }
+  if (num < 1_000_000_000_000) {
+    return `${(num / 1_000_000_000).toFixed(2)}B GEN`;
+  }
+  if (num < 1_000_000_000_000_000) {
+    return `${(num / 1_000_000_000_000).toFixed(2)}T GEN`;
+  }
+  return `${(num / 1_000_000_000_000_000).toFixed(2)}P GEN`;
+}
+
+export function formatCommaGen(balanceStr: string): string {
+  if (!balanceStr) return "0.0000 GEN";
+  const clean = balanceStr.replace(/ GEN$/i, "").trim();
+  const parts = clean.split(".");
+  const whole = parts[0] || "0";
+  const decimals = parts[1] ? `.${parts[1]}` : "";
+  const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return `${formattedWhole}${decimals} GEN`;
+}
+
+
 export function formatWeiToGen(wei: bigint | string | number): string {
   try {
     const b = BigInt(wei);
