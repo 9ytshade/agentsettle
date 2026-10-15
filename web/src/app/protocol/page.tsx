@@ -19,7 +19,7 @@ export default function ProtocolSpecPage() {
       <header className="space-y-4 pb-8 border-b border-[#292d30]">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[9999px] bg-[#0b0e14] border border-[#292d30] text-[#9281f7] text-xs font-mono">
           <span className="w-1.5 h-1.5 rounded-full bg-[#9281f7]" />
-          <span>GenLayer Intelligent Contract Specification / v1.0.0</span>
+          <span>GenLayer Intelligent Contract Specification / v1.2.0</span>
         </div>
         <h1 className="text-4xl sm:text-6xl font-normal tracking-tight text-white leading-tight">
           AgentSettle Protocol Specification
@@ -242,7 +242,7 @@ export default function ProtocolSpecPage() {
         </p>
 
         <div className="p-6 rounded-[16px] bg-[#0b0e14] border border-[#292d30] space-y-4 text-xs font-mono">
-          <p className="text-[#9281f7]">// Equivalence Principle Consensus Protocol</p>
+          <p className="text-[#9281f7]">{"// Equivalence Principle Consensus Protocol"}</p>
           <div className="space-y-2 text-[#f0f0f0]">
             <p>1. Validator receives on-chain dispute request with task ID and evidence digest.</p>
             <p>2. If deliverable_url is provided, validator WebVM issues HTTPS GET request (validated by anti-SSRF filters).</p>
@@ -267,7 +267,7 @@ export default function ProtocolSpecPage() {
         </p>
 
         <div className="p-6 rounded-[16px] bg-black border border-[#292d30] space-y-3 font-mono text-xs text-[#9281f7]">
-          <p className="text-[#6e727a]">// Exact Fund Conservation Theorem</p>
+          <p className="text-[#6e727a]">{"// Exact Fund Conservation Theorem"}</p>
           <p>worker_bps = (passed_criteria / total_criteria) * 10,000</p>
           <p>escrow_worker_share = (escrow_amount * worker_bps) // 10,000</p>
           <p>escrow_client_refund = escrow_amount - escrow_worker_share</p>

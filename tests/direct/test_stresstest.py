@@ -215,12 +215,22 @@ def test_exact_fund_conservation(
     direct_vm.sender = direct_bob
     contract.submit_defense(tid, "Submitting defense justification")
 
+    if verdict_type == "FULL_PAYOUT_WORKER":
+        crit_results = [{"criterion": "Scope", "result": "PASS"}]
+    elif verdict_type == "FULL_REFUND_CLIENT":
+        crit_results = [{"criterion": "Scope", "result": "FAIL"}]
+    else:
+        crit_results = [
+            {"criterion": "Scope Component 1", "result": "PASS"},
+            {"criterion": "Scope Component 2", "result": "FAIL"},
+        ]
+
     direct_vm.mock_llm(
         r"impartial GenLayer Validator Magistrate",
         json.dumps({
             "verdict": verdict_type,
             "worker_bps": requested_bps,
-            "criteria_results": [{"criterion": "Scope", "result": "PASS"}],
+            "criteria_results": crit_results,
             "reasoning": "Adjudication conservation verification",
         }),
     )

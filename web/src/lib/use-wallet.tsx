@@ -220,17 +220,28 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const assertStudionet = useCallback(async (): Promise<boolean> => {
-    if (!window.ethereum) return false;
+    if (!window.ethereum) {
+      throw new Error("No Web3 wallet detected. Please install MetaMask to interact with AgentSettle.");
+    }
     try {
       const chainIdHex = (await window.ethereum.request({ method: "eth_chainId" })) as string;
       const currentChainId = parseInt(chainIdHex, 16);
       if (currentChainId !== STUDIONET_CHAIN_ID) {
         await switchNetwork();
-        return true;
+        const updatedHex = (await window.ethereum.request({ method: "eth_chainId" })) as string;
+        const updatedChainId = parseInt(updatedHex, 16);
+        if (updatedChainId !== STUDIONET_CHAIN_ID) {
+          setWrongNetwork(true);
+          throw new Error(
+            "Transaction blocked: active wallet network is not GenLayer Studionet (Chain 61999)."
+          );
+        }
       }
+      setWrongNetwork(false);
       return true;
-    } catch {
-      return false;
+    } catch (err: unknown) {
+      setWrongNetwork(true);
+      throw err;
     }
   }, [switchNetwork]);
 
@@ -296,12 +307,17 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   const getSignerClient = useCallback(() => {
     if (!account) return null;
+    if (wrongNetwork) {
+      throw new Error(
+        "Transaction blocked: active wallet network is not GenLayer Studionet (Chain 61999). Please switch network to continue."
+      );
+    }
     return createClient({
       chain: studionet,
       endpoint: STUDIONET_RPC,
       account: account as `0x${string}`,
     });
-  }, [account]);
+  }, [account, wrongNetwork]);
 
   const value = useMemo<WalletContextValue>(
     () => ({

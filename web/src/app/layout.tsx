@@ -58,7 +58,7 @@ export default function RootLayout({
           <footer className="border-t border-[#292d30] bg-black py-8 text-center text-xs text-[#a1a4a5] font-mono">
             <div className="max-w-[1200px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
               <p className="text-[#a1a4a5]">
-                AgentSettle v1.0.0 <span className="text-[#464a4d]">/</span> Autonomous Agentic Commerce SLA Protocol
+                AgentSettle v1.2.0 <span className="text-[#464a4d]">/</span> Autonomous Agentic Commerce SLA Protocol
               </p>
               <p className="text-[#6e727a]">
                 Powered by GenLayer Intelligent Contracts on Studionet (Chain 61999)

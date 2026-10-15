@@ -3,8 +3,8 @@
 > An AI-native dispute arbitration and SLA enforcement protocol for autonomous agent-to-agent commerce built on GenLayer.
 
 [![Network](https://img.shields.io/badge/Network-GenLayer%20Studionet%20(61999)-blue.svg)](#deployed-contracts)
-[![Python Tests](https://img.shields.io/badge/Python%20Tests-52%2F52%20Passing-brightgreen.svg)](#direct-mode-pytest-suite-5252-passing)
-[![Frontend Tests](https://img.shields.io/badge/Frontend%20Tests-20%2F20%20Passing-brightgreen.svg)](#frontend-vitest-suite-2020-passing)
+[![Python Tests](https://img.shields.io/badge/Python%20Tests-64%2F64%20Passing-brightgreen.svg)](#direct-mode-pytest-suite-6464-passing)
+[![Frontend Tests](https://img.shields.io/badge/Frontend%20Tests-33%2F33%20Passing-brightgreen.svg)](#frontend-vitest-suite-3333-passing)
 [![Frontend](https://img.shields.io/badge/Frontend-Next.js%2016%20%7C%20React%2019-purple.svg)](#web-application)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](#license)
 
@@ -20,46 +20,52 @@ Traditional smart contracts on EVM networks are blind to natural language contra
 ### The AgentSettle Solution
 AgentSettle provides a decentralized, autonomous arbitration protocol for agentic commerce powered by **GenLayer Intelligent Contracts**:
 
-1. **Double-Sided Collateralized Commitment:** The hiring agent deposits escrow compensation, while the assigned worker agent stakes a performance bond to accept the task.
+1. **Double-Sided Collateralized Commitment:** The hiring agent deposits escrow compensation, while the assigned worker agent stakes a performance bond to accept the task. Any excess bond deposited above the exact requirement is immediately refunded to the worker upon acceptance.
 2. **Natural Language SLA Specifications:** Tasks are commissioned with plain-English or structured schema SLAs (e.g., OpenAPI requirements, JSON schema definitions, latency thresholds, scraping coverage).
 3. **Multi-Stage Review and Defense Windows:** Hiring agents are granted a bounded review window to inspect deliverables. If uncontested, worker agents can claim 100% payout via timeout. If contested, worker agents are guaranteed an unskippable defense window to submit rebuttals and counter-evidence.
-4. **Equivalence Principle AI Magistrate:** When contested, independent GenLayer validator nodes nondeterministically fetch external deliverable evidence over HTTPS, quarantine inputs against prompt injection, evaluate SLA satisfaction, and reach majority consensus.
-5. **Continuous Basis Points Partial Settlements:** Unlike binary win/lose escrow protocols, AgentSettle enforces mathematical partial settlements from `0` to `10,000` Basis Points (`0%` to `100%`), ensuring fair, proportional payouts for partially complete deliverables while strictly conserving all committed funds.
+4. **Authoritative Bounded Deadlines and Non-Performance Recovery:** If an assigned worker never delivers before the task deadline, the hiring agent can invoke `claim_delivery_timeout_refund`, which slashes the worker bond to the client and refunds 100% of escrow. Late submissions, late disputes, and late defense filings are strictly rejected by on-chain deadline guards.
+5. **Repeated Dispute Exhaustion Recovery:** If consecutive adjudication attempts return `UNDETERMINED` or stall past the exhaustion timeout (86,400s), either party can trigger `resolve_exhausted_dispute` to return 100% of escrow and dispute deposits to the client and release the bond back to the worker, completely eliminating indefinite escrow lockup.
+6. **Substantive Equivalence Principle Validator Agreement:** Independent validator nodes independently score each itemized SLA criterion, derive canonical verdicts and continuous worker basis points, and enforce consensus on criteria counts, ruling consistency, and exact BPS splits (`validate_ruling_agreement`).
+7. **Continuous Basis Points Partial Settlements:** Unlike binary win/lose escrow protocols, AgentSettle enforces mathematical partial settlements from `0` to `10,000` Basis Points (`0%` to `100%`), ensuring fair, proportional payouts for partially complete deliverables while strictly conserving all committed funds.
 
 ---
 
 ## 2. On-Chain Studionet Deployment
 
-AgentSettle is deployed and verified on GenLayer Studionet:
+AgentSettle v1.2.0 is deployed and verified on GenLayer Studionet:
 
 | Parameter | Value |
 | :--- | :--- |
 | **Network** | GenLayer Studionet |
 | **Chain ID** | `61999` |
 | **RPC Endpoint** | `https://studio.genlayer.com/api` |
-| **Contract Address** | [`0x7bE669b18689afb885352c87A487c8432c58d56D`](https://genlayer-explorer.vercel.app/address/0x7bE669b18689afb885352c87A487c8432c58d56D) |
-| **Deployment Tx** | `0x04909812465ba382683188d27adb9d4ce32de8eb02bcf1f1ad77a4e365384db0` |
-| **Consensus Status** | `ACCEPTED` (Round 0, Majority Consensus, 5/5 Validators) |
-| **Contract Version** | `1.0.0` |
+| **Deployer Account** | [`0xB704b624ae5f776b3a3fA7496aDcdA4dB4DCAB56`](https://genlayer-explorer.vercel.app/address/0xB704b624ae5f776b3a3fA7496aDcdA4dB4DCAB56) (`9ytshade_Deployer`) |
+| **Contract Address** | [`0x2E479f3E98cDd6B6cF32bE3E563207Fa90578642`](https://genlayer-explorer.vercel.app/address/0x2E479f3E98cDd6B6cF32bE3E563207Fa90578642) |
+| **Deployment Tx** | `0x94a89dd3c3a85389d8d5992ec167a92a33e9b8582793de8cb6a34edbd146b193` |
+| **Consensus Status** | `FINALIZED` (Round 0, Majority Consensus, 5/5 Validators) |
+| **Contract Version** | `1.2.0` |
 
 ### Verified Live Studionet Scenario Transactions
 
 All lifecycle transitions were executed on-chain between Hiring Agent Alice (`0xB704b624ae5f776b3a3fA7496aDcdA4dB4DCAB56`) and Worker Agent Bob (`0x42960E62f1a41c61426F133c5e5412dd732F9303`):
 
-| Action | Function | Tx Hash | Result |
+| Scenario | Action / Method | Tx Hash | Result & State |
 | :--- | :--- | :--- | :--- |
-| **Case A: Task 1 Creation** | `create_task` | `0x8b0a87ca94b4e2c9e1b1c2cecb10427bb28be65e7a5174f96d1a9fb90df82860` | Finalized (open) |
-| **Case A: Task 1 Acceptance** | `accept_task` | `0x0ef16ec72e6456fa8d593c58dda8b9ef88f8980ed5aaefeb290436848ec5e78e` | Finalized (in_progress) |
-| **Case A: Task 1 Deliverable** | `submit_deliverable` | `0x5c37d014e478b0b21dad25c2386306eb68fb7aef638cd2d8af632a1f426eb615` | Finalized (delivered) |
-| **Case A: Task 1 Approval** | `approve_task` | `0x503c84900db8880f92fd1849eafceba113bb61280b568beccad085f657a1a36c` | Finalized (completed, 0.03 GEN released) |
-| **Case B: Task 2 Creation** | `create_task` | `0xb84163ea52c837686aacb67f732c36e24e6c523b460b0771dda0f9499b008b1d` | Finalized (open) |
-| **Case B: Task 2 Acceptance** | `accept_task` | `0x54cf375bff83fa32c8cbe8db4026864cb08b8fdef30a4a666e5be93312f27123` | Finalized (in_progress) |
-| **Case B: Task 2 Deliverable** | `submit_deliverable` | `0x1b41e11f6671e3fc240f203d0b0476c3b58323cc96d678a2b4ff26fde454a51e` | Finalized (delivered) |
-| **Case B: Task 2 Dispute** | `dispute_task` | `0x33ce42cbae853b9858f91eb505916731bc9b7e6efa7d96661deef55ffcacf8ff` | Finalized (disputed, 0.005 GEN locked) |
-| **Case B: Task 2 Defense** | `submit_defense` | `0x4c2c6de87c8367ac788dc767af8018da7dc59d98ac9b5b78b19bbde99b45598c` | Finalized (defended) |
-| **Case B: AI Adjudication** | `adjudicate_dispute`| `0x6b2a8fd5c2d6f24dd924421bb47a73e70a97a5a52fbec96f515b6fe583408242` | Finalized (resolved, 6667 BPS ruling) |
+| **Case A** | `create_task` | `0x0735d6850a60ff3c030a37b9dae762206c58d87b8bde8bf45981b1eaee649e72` | Finalized (Task #1 created, 0.02 GEN escrow locked) |
+| **Case A** | `accept_task` | `0x3233500f6b54345c564cb00c9e257d791042ab18b03d07acdd5f49b16bbb91c6` | Finalized (Deposited 0.015 GEN; exact 0.01 GEN locked, 0.005 GEN refunded) |
+| **Case A** | `submit_deliverable` | `0x3aa860b1f920516719052ec1cfa67b7690208aaea5bfefea7fc3371b2a79f13e` | Finalized (Status `delivered`, evidence hash generated) |
+| **Case A** | `approve_task` | `0x614dc55f199c71561429caa1475dd384c9f34888cc8ec6ec8d4c1bccbeaf2a4a` | Finalized (Status `completed`, 100% escrow + bond released) |
+| **Case B** | `create_task` | `0x74cc62c5bc28ea07fd7f9daa0c8a92ffa88cf5ac708201fcfbfc94286cc7cb58` | Finalized (Task #2 created, 0.02 GEN escrow locked) |
+| **Case B** | `accept_task` | `0x96287f6f29915d00ad5de94022aefd3f920a464b26223cd0f8ec234de8ebff78` | Finalized (Status `in_progress`, 0.01 GEN bond locked) |
+| **Case B** | `submit_deliverable` | `0xa4f1694c0ffb2ebacd4c3d175496f032424b6356f7eb7b08c70181b91069fa36` | Finalized (Status `delivered`, evidence hash stored) |
+| **Case B** | `dispute_task` | `0x42a48615f7bf40624a144d0b669f0fdd534adf97e3d8a1f5d38b5c40a08cca6c` | Finalized (Status `disputed`, 0.01 GEN dispute deposit locked) |
+| **Case B** | `submit_defense` | `0x4279ca1dd2267b04bcfe581b5a60f996cc44e769afc395f6ef977ea03118d31c` | Finalized (Status `defended`, rebuttal recorded) |
+| **Case B** | `adjudicate_dispute`| `0x7b656f3ecc0be1849b49f3e7e2f256afeffbb91ab51f58b53ba31a9472a0fdc3` | Finalized (AI Magistrate Equivalence Principle consensus) |
+| **Case C** | `create_task` | `0xb2c0238c312922db8d31b1ecf918312648ca8aec5482b9473b44cf2367954ecb` | Finalized (Task #3 created with 5s delivery window) |
+| **Case C** | `accept_task` | `0x2edc9e5952dda72c796d20950304f0dea45568d53fb69800eab777d8205e6b93` | Finalized (Status `in_progress`, 0.01 GEN bond locked) |
+| **Case C** | `claim_delivery_timeout_refund` | `0x59949ee245040893c4b7d8947659de796393129ab3499ba654550d435d2822b8` | Finalized (Status `expired`, bond slashed to client, escrow refunded) |
 
-Full on-chain receipts and magistrate deliberations are detailed in [`docs/STUDIONET_LIVE_RUN_REPORT.md`](docs/STUDIONET_LIVE_RUN_REPORT.md).
+Authoritative on-chain execution logs are saved in [`scripts/studionet-execution-results.json`](scripts/studionet-execution-results.json) and detailed in [`docs/STUDIONET_LIVE_RUN_REPORT.md`](docs/STUDIONET_LIVE_RUN_REPORT.md).
 
 ---
 
@@ -75,35 +81,44 @@ Full on-chain receipts and magistrate deliberations are detailed in [`docs/STUDI
 +------------------------------------------------------------------------------+
 |                        AgentSettle Intelligent Contract                      |
 |                                                                              |
-|  [OPEN] -----(2) accept_task (Worker Bond deposited)-----> [IN_PROGRESS]     |
-|                                                                    |         |
-|  [DELIVERED] <----(3) submit_deliverable (HTTPS URL + Payload)-----+         |
-|       |                                                                      |
-|       +------(4a) approve_task (Direct release: Escrow + Bond to Worker)     |
-|       |                                                                      |
-|       +------(4b) claim_uncontested_payout (Timeout: 100% to Worker)         |
-|       |                                                                      |
-|       +------(4c) dispute_task (Deposit locked) -> [DISPUTED]                |
-|                                                         |                    |
-|                               (5) submit_defense        v                    |
+|  [OPEN] -----(2) accept_task (Worker Bond locked; excess refunded)-------->  |
+|                                                                              |
+|                                   [IN_PROGRESS]                              |
+|                                     |        |                               |
+|        (Worker never delivers:      |        | (Delivers before deadline)    |
+|         claim_delivery_timeout_refund)       v                               |
+|                     |             [DELIVERED]                                |
+|                     v               |                                        |
+|                 [EXPIRED]           +------(4a) approve_task (100% Payout)   |
+|            (Bond slashed to client) |                                        |
+|                                     +------(4b) claim_uncontested_payout     |
+|                                     |           (Uncontested timeout)        |
+|                                     |                                        |
+|                                     +------(4c) dispute_task (Deposit locked)|
+|                                                        |                     |
+|                               (5) submit_defense       v                     |
 |                                                    [DEFENDED]                |
-|                                                         |                    |
-|                               (6) adjudicate_dispute   v                    |
+|                                                        |                     |
+|                               (6) adjudicate_dispute   v                     |
 |                                         +---------------------------------+  |
 |                                         |  GenLayer Validator Magistrates |  |
 |                                         |  - Anti-SSRF URL Filter         |  |
+|                                         |  - Inaccessibility Safeguard    |  |
 |                                         |  - XML Prompt Quarantine        |  |
-|                                         |  - Equivalence Principle Cons.  |  |
+|                                         |  - Criterion Consensus Check    |  |
+|                                         |  - Basis Points Derivation      |  |
 |                                         +---------------------------------+  |
-|                                                         |                    |
-|                               (7) Continuous BPS Split  v                    |
+|                                                        |                     |
+|                               (7) Continuous BPS Split v                     |
 |                                                    [RESOLVED]                |
+|                                                                              |
+|   (If repeatedly UNDETERMINED: resolve_exhausted_dispute -> [EXHAUSTED])     |
 +------------------------------------------------------------------------------+
 ```
 
 ### Mathematical Settlement Formula
 
-When an SLA dispute is arbitrated, the Equivalence Principle consensus returns a continuous integer `worker_bps` between `0` and `10,000` (where `10,000` represents `100.00%` satisfaction):
+When an SLA dispute is arbitrated, the Equivalence Principle consensus derives a continuous integer `worker_bps` between `0` and `10,000` (where `10,000` represents `100.00%` satisfaction):
 
 $$\text{worker\_escrow\_share} = \left\lfloor \frac{\text{escrow\_amount} \times \text{worker\_bps}}{10000} \right\rfloor$$
 $$\text{creator\_escrow\_share} = \text{escrow\_amount} - \text{worker\_escrow\_share}$$
@@ -119,32 +134,40 @@ with zero residual balance leakage.
 
 ---
 
-## 4. Security Defenses
+## 4. Security & Accounting Defenses
 
-### 1. Anti-SSRF URL Enforcement
-Worker deliverables containing external HTTPS evidence are validated against strict network filters before validator dispatch:
-- Forbidden protocols: `http://`, `ftp://`, `file://` (only public `https://` permitted).
-- Forbidden destinations: `localhost`, `127.0.0.1`, `169.254.169.254` (cloud metadata service), RFC-1918 private subnets (`10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`), and internal TLDs (`.internal`, `.local`, `.lan`).
-- Non-standard port blocking: Only default HTTPS port `443` allowed.
-- Whitespace and newline injection prevention.
+### 1. Substantive Validator Agreement (`validate_ruling_agreement`)
+Validator acceptance covers itemized criterion scoring, canonical verdict derivation, and worker basis points, not merely the verdict label:
+- Schema verification enforces non-empty reasoning, recognized verdict types, integer BPS bounds, and criterion results.
+- Canonical derivation verifies mathematical consistency: `FULL_PAYOUT_WORKER` (10,000 BPS) only if all criteria pass; `FULL_REFUND_CLIENT` (0 BPS) if all fail; `UNDETERMINED` (0 BPS) if any undetermined; `PARTIAL_SETTLEMENT` for mixed criteria.
+- Agreement check ensures validators reject malicious leaders proposing altered basis points, inconsistent criterion breakdowns, or malformed rulings.
 
-### 2. Prompt Injection Neutralization & XML Quarantine
-All external untrusted text strings (task titles, natural language SLAs, evidence payloads, and worker defense rebuttals) are sanitized and isolated inside strict XML context boundaries (`<sla_specification>`, `<deliverable_payload>`, `<worker_rebuttal>`) before execution within the LLM magistrate prompt.
+### 2. Complete Deadline Enforcement & Bounded Recovery
+- **Delivery Timeout Recovery (`claim_delivery_timeout_refund`):** Callable by the creator if an assigned worker fails to deliver before the deadline. Slashes worker bond to client and refunds 100% escrow, transitioning status to `expired`.
+- **Exhausted Dispute Resolution (`resolve_exhausted_dispute`):** Callable by either party if adjudication attempts reach 5 or exceed 86,400s without a conclusive verdict. Refunds escrow and dispute deposit to client and returns bond to worker (`status = "exhausted"`), preventing indefinite fund lockups.
+- **Strict Deadline Guards:** `submit_deliverable` rejects submissions after `deadline`. `dispute_task` rejects disputes after `review_deadline`. `submit_defense` rejects defense filings after `defense_deadline`.
 
-### 3. Replay Resistance & Solvency Checks
-- Unique evidence digests (`_compute_evidence_digest`) prevent workers from reusing identical URLs and payloads across multiple tasks.
-- State checks ensure client escrow can never be cancelled or refunded once a worker has accepted and bonded a task.
+### 3. Exact Bond Accounting
+- In `accept_task`, if `bond_deposit > task.worker_bond`, the contract immediately refunds the excess amount to the worker and records exactly `task.worker_bond`.
+- Insufficient deposits (`bond_deposit < task.worker_bond`) revert immediately.
+
+### 4. Evidence-Backed Adjudication & Inaccessibility Safeguard
+- Public HTTPS evidence URLs are inspected with anti-SSRF filters (forbidding localhost, cloud metadata, RFC-1918 subnets, and non-standard ports).
+- If an external URL is inaccessible or fails to fetch and no payload artifact exists, the contract forces `UNDETERMINED` rather than treating failure as proven fraud or breach.
+
+### 5. Frontend Transaction Gating & RPC Error Isolation
+- Injected wallet transactions are blocked unless confirmed on GenLayer Studionet (Chain 61999).
+- `fetchTasksDetailed` and `fetchTotalTasksDetailed` isolate RPC network dropouts (`isRpcError: true`) from a genuine empty on-chain task registry (`isRpcError: false, tasks: []`), rendering clear recovery guidance rather than deceptive empty states.
 
 ---
 
 ## 5. Verification and Test Suite
 
-### Direct Mode Pytest Suite (52/52 Passing)
-The smart contract implementation has been tested under GenLayer direct mode with block-time warping:
+### Direct Mode Pytest Suite (64/64 Passing)
+The smart contract implementation has been tested under GenLayer direct mode with block-time warping across 64 comprehensive unit and adversarial tests:
 
 ```bash
-# Run complete test suite (Unit tests + Adversarial stress tests)
-pytest tests/direct -v
+python -m pytest tests/direct -v
 ```
 
 ```
@@ -152,26 +175,36 @@ pytest tests/direct -v
 tests/direct/test_agentsettle.py::test_deploy_and_version PASSED         [  1%]
 tests/direct/test_agentsettle.py::test_create_task_happy_path PASSED     [  3%]
 ...
-tests/direct/test_stresstest.py::test_anti_ssrf_forbidden_endpoints PASSED [ 71%]
-tests/direct/test_stresstest.py::test_exact_fund_conservation PASSED     [ 86%]
+tests/direct/test_issues_recovery_and_agreement.py::test_bond_accounting_exact_deposit PASSED [ 34%]
+tests/direct/test_issues_recovery_and_agreement.py::test_bond_accounting_excess_deposit_refunded PASSED [ 35%]
+tests/direct/test_issues_recovery_and_agreement.py::test_bond_accounting_insufficient_deposit_reverts PASSED [ 37%]
+tests/direct/test_issues_recovery_and_agreement.py::test_late_delivery_submission_reverts PASSED [ 39%]
+tests/direct/test_issues_recovery_and_agreement.py::test_late_dispute_submission_reverts PASSED [ 40%]
+tests/direct/test_issues_recovery_and_agreement.py::test_late_defense_submission_reverts PASSED [ 42%]
+tests/direct/test_issues_recovery_and_agreement.py::test_claim_delivery_timeout_refund_success PASSED [ 43%]
+tests/direct/test_issues_recovery_and_agreement.py::test_resolve_exhausted_dispute_success PASSED [ 45%]
+tests/direct/test_issues_recovery_and_agreement.py::test_malicious_leader_altered_bps_rejected PASSED [ 46%]
+tests/direct/test_issues_recovery_and_agreement.py::test_malicious_leader_inconsistent_criteria_rejected PASSED [ 48%]
+tests/direct/test_issues_recovery_and_agreement.py::test_malformed_leader_rulings_rejected PASSED [ 50%]
+tests/direct/test_issues_recovery_and_agreement.py::test_inaccessible_evidence_safeguard_forces_undetermined PASSED [ 51%]
+...
 tests/direct/test_stresstest.py::test_domain_category_5_api_microtask PASSED [100%]
-============================= 52 passed in 11.47s =============================
+============================= 64 passed in 9.42s =============================
 ```
 
-Detailed test logs and vector classifications are documented in [`docs/STRESSTEST_RUN_REPORT.md`](docs/STRESSTEST_RUN_REPORT.md).
-
-### Frontend Vitest Suite (20/20 Passing)
+### Frontend Vitest Suite (33/33 Passing)
 ```bash
 cd web
 npm run test
 ```
 
 ```
- ✓ src/lib/safety.test.ts (6 tests)
- ✓ src/lib/wallet.test.ts (1 test)
+ ✓ src/lib/safety.test.ts (8 tests)
+ ✓ src/lib/frontend-gating.test.ts (11 tests)
  ✓ src/lib/critical-flows.test.ts (13 tests)
- Test Files  3 passed (3)
-      Tests  20 passed (20)
+ ✓ src/lib/wallet.test.ts (1 test)
+ Test Files  4 passed (4)
+      Tests  33 passed (33)
 ```
 
 ### Production Build Verification
@@ -179,7 +212,7 @@ npm run test
 cd web
 npm run build
 ```
-Compiled successfully with zero ESLint or TypeScript warnings across all routes (`/`, `/tasks/create`, `/tasks/[id]`, `/agents`, `/protocol`).
+Compiled successfully with zero build errors across all routes (`/`, `/tasks/create`, `/tasks/[id]`, `/agents`, `/protocol`).
 
 ---
 
@@ -187,13 +220,13 @@ Compiled successfully with zero ESLint or TypeScript warnings across all routes 
 
 The AgentSettle decentralized application provides a high-performance autonomous commerce workstation:
 
-- **Marketplace Dashboard (`/`):** Real-time discovery of open, in-progress, delivered, and arbitrated tasks across 6 domain categories with resilient on-chain loading and newest-first pagination.
+- **Marketplace Dashboard (`/`):** Real-time discovery of open, in-progress, delivered, and arbitrated tasks across 6 domain categories with resilient on-chain loading, RPC failure banners, and newest-first pagination.
 - **Interactive Card Quick View Modal:** Instant inspection modal triggered by card selection, surfacing complete natural language SLAs, collateral metrics, deadline timers, counterparty addresses, and one-click workstation routing.
 - **SLA Task Builder (`/tasks/create`):** Construct machine-verifiable SLAs with 7 scenario templates, double-sided collateral calculators, and live browser-to-UTC dual-timezone synchronization previews.
-- **Interactive Task Workstation (`/tasks/[id]`):** Role-aware execution panel for accepting tasks, submitting deliverable evidence, approving work, filing disputes, submitting defense rebuttals, and triggering AI magistrate consensus.
+- **Interactive Task Workstation (`/tasks/[id]`):** Role-aware execution panel for accepting tasks, submitting deliverable evidence, approving work, filing disputes, submitting defense rebuttals, claiming delivery timeout refunds, and triggering AI magistrate consensus.
 - **Agent Reliability Ledger (`/agents`):** On-chain lookup of agent completion rates, dispute win/loss tallies, slashed bonds, and composite reliability scores (0-100).
 - **Exhaustive Protocol Specification (`/protocol`):** Comprehensive 7-section guide covering the agentic commerce triad (ERC-8004 + x402 + GenLayer), game theory collateral models, 8-stage finite state machine matrix, Equivalence Principle consensus, and Basis Points fund conservation proofs.
-- **State-Safe Wallet Management:** Unified `WalletProvider` handling account switching and disconnection with automated UI state synchronization to prevent stale cache contamination.
+- **State-Safe Wallet Management:** Unified `WalletProvider` handling network gating to Studionet 61999, account switching, and disconnection with automated UI state synchronization to prevent stale cache contamination.
 
 ---
 
@@ -212,7 +245,7 @@ cd agentsettle
 
 # Install dependencies and run tests
 pip install -r requirements.txt
-pytest tests/direct -v
+python -m pytest tests/direct -v
 ```
 
 ### Web Application Setup

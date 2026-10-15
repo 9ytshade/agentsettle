@@ -71,7 +71,7 @@ def create_sample_task(
 
 def test_deploy_and_version(direct_deploy):
     contract = deploy_contract(direct_deploy)
-    assert contract.get_contract_version() == "1.0.0"
+    assert contract.get_contract_version() == "1.2.0"
     assert contract.get_total_tasks() == 0
 
 
@@ -89,7 +89,7 @@ def test_create_task_happy_path(direct_vm, direct_deploy, direct_alice):
 
     task = contract.get_task(task_id)
     assert task["id"] == 1
-    assert task["creator"].as_bytes == direct_alice
+    assert task["creator"] == direct_alice
     assert task["title"] == DEFAULT_TITLE
     assert task["category"] == DEFAULT_CATEGORY
     assert task["sla_specification"] == DEFAULT_SLA
@@ -174,7 +174,7 @@ def test_accept_task_happy_path(direct_vm, direct_deploy, direct_alice, direct_b
     assert res is True
     task = contract.get_task(task_id)
     assert task["status"] == "in_progress"
-    assert task["worker"].as_bytes == direct_bob
+    assert task["worker"] == direct_bob
 
     worker_tasks = contract.get_tasks_by_worker(direct_bob)
     assert worker_tasks == [task_id]
@@ -449,7 +449,7 @@ def test_dispute_and_defense_happy_path(direct_vm, direct_deploy, direct_alice, 
 
     dispute = contract.get_dispute(task_id)
     assert dispute["allegations"] == allegations
-    assert dispute["disputant"].as_bytes == direct_alice
+    assert dispute["disputant"] == direct_alice
 
     # Worker submits defense rebuttal
     rebuttal = "The remaining 498 records are fully accessible at the provided HTTPS CDN URL."

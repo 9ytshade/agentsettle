@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-10-15T11:13:18.216Z",
+  "contract": "0x2E479f3E98cDd6B6cF32bE3E563207Fa90578642",
+  "version": "1.2.0",
+  "hiringAgent": "0xB704b624ae5f776b3a3fA7496aDcdA4dB4DCAB56",
+  "workerAgent": "0x42960E62f1a41c61426F133c5e5412dd732F9303",
+  "cases": [
+    {
+      "caseName": "Case A: Excess Bond Accounting & Happy Path Completion",
+      "taskId": 1,
+      "transactions": {
+        "createTask": "0x0735d6850a60ff3c030a37b9dae762206c58d87b8bde8bf45981b1eaee649e72",
+        "acceptTaskWithExcessBond": "0x3233500f6b54345c564cb00c9e257d791042ab18b03d07acdd5f49b16bbb91c6",
+        "submitDeliverable": "0x3aa860b1f920516719052ec1cfa67b7690208aaea5bfefea7fc3371b2a79f13e",
+        "approveTask": "0x614dc55f199c71561429caa1475dd384c9f34888cc8ec6ec8d4c1bccbeaf2a4a"
+      },
+      "finalStatus": "completed",
+      "verifiedExactBondLockup": true
+    },
+    {
+      "caseName": "Case B: SLA Dispute, Defense & AI Magistrate Adjudication",
+      "taskId": 2,
+      "transactions": {
+        "createTask": "0x74cc62c5bc28ea07fd7f9daa0c8a92ffa88cf5ac708201fcfbfc94286cc7cb58",
+        "acceptTask": "0x96287f6f29915d00ad5de94022aefd3f920a464b26223cd0f8ec234de8ebff78",
+        "submitDeliverable": "0xa4f1694c0ffb2ebacd4c3d175496f032424b6356f7eb7b08c70181b91069fa36",
+        "disputeTask": "0x42a48615f7bf40624a144d0b669f0fdd534adf97e3d8a1f5d38b5c40a08cca6c",
+        "submitDefense": "0x4279ca1dd2267b04bcfe581b5a60f996cc44e769afc395f6ef977ea03118d31c",
+        "adjudicateDispute": "0x7b656f3ecc0be1849b49f3e7e2f256afeffbb91ab51f58b53ba31a9472a0fdc3"
+      },
+      "finalStatus": "defended",
+      "ruling": {
+        "workerBps": null,
+        "criteriaCount": 0
+      }
+    },
+    {
+      "caseName": "Case C: Delivery Timeout Refund Recovery",
+      "taskId": 3,
+      "transactions": {
+        "createTask": "0xb2c0238c312922db8d31b1ecf918312648ca8aec5482b9473b44cf2367954ecb",
+        "acceptTask": "0x2edc9e5952dda72c796d20950304f0dea45568d53fb69800eab777d8205e6b93",
+        "claimDeliveryTimeoutRefund": "0x59949ee245040893c4b7d8947659de796393129ab3499ba654550d435d2822b8"
+      },
+      "finalStatus": "expired",
+      "verifiedTimeoutRecovery": true
+    }
+  ]
+}

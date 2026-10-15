@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { fetchTasksResilient } from "../lib/genlayer";
+import { fetchTasksDetailed } from "../lib/genlayer";
 import type { TaskRecord, TaskCategory } from "../types/agentsettle";
 import { TaskCard } from "../components/task-card";
 import { TaskPreviewModal } from "../components/task-preview-modal";
-import { PlusCircleIcon, BotIcon, ScaleIcon } from "../components/icons";
+import { PlusCircleIcon, BotIcon, ScaleIcon, AlertCircleIcon } from "../components/icons";
 
 const CATEGORIES: ("All" | TaskCategory)[] = [
   "All",
@@ -32,6 +32,8 @@ export default function MarketplacePage() {
   const [tasks, setTasks] = useState<TaskRecord[]>([]);
   const [failedIds, setFailedIds] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isRpcError, setIsRpcError] = useState(false);
+  const [rpcErrorMsg, setRpcErrorMsg] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,12 +43,16 @@ export default function MarketplacePage() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetchTasksResilient(activeTab, 0, 50);
+      const res = await fetchTasksDetailed(activeTab, 0, 50);
       setTasks(res.tasks);
       setFailedIds(res.failedIds);
       setTotalCount(res.totalCount);
+      setIsRpcError(res.isRpcError);
+      setRpcErrorMsg(res.errorMessage || "");
     } catch (err) {
       console.error("Failed loading marketplace tasks:", err);
+      setIsRpcError(true);
+      setRpcErrorMsg(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -171,8 +177,34 @@ export default function MarketplacePage() {
         </div>
       </div>
 
+      {/* RPC Outage Warning Banner */}
+      {isRpcError && (
+        <div className="p-4 rounded-[16px] border border-[#ff9592]/40 bg-[#0b0e14] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+          <div>
+            <p className="font-medium text-[#ff9592] flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#ff9592] animate-ping" />
+              Studionet RPC Unreachable
+            </p>
+            <p className="text-[#a1a4a5] text-[11px] mt-0.5 font-mono">
+              Unable to read from GenLayer Studionet RPC (Chain 61999). This indicates a network or node latency issue, not an empty task registry.
+            </p>
+            {rpcErrorMsg && (
+              <p className="text-[#6e727a] text-[10px] font-mono mt-1 max-w-xl truncate">
+                Details: {rpcErrorMsg}
+              </p>
+            )}
+          </div>
+          <button
+            onClick={() => void loadData()}
+            className="px-3.5 py-1.5 rounded-[6px] border border-[#292d30] hover:border-white bg-black text-[#f0f0f0] text-xs font-mono transition-colors whitespace-nowrap"
+          >
+            Retry Connection
+          </button>
+        </div>
+      )}
+
       {/* Partial On-Chain Data Warning Banner */}
-      {failedIds.length > 0 && (
+      {!isRpcError && failedIds.length > 0 && (
         <div className="p-4 rounded-[16px] border border-[#ff9592]/30 bg-[#0b0e14] flex items-center justify-between text-xs">
           <div>
             <p className="font-medium text-[#ff9592]">Partial On-Chain Data Loaded</p>
@@ -206,6 +238,22 @@ export default function MarketplacePage() {
               className="h-64 rounded-[16px] border border-[#292d30] bg-[#0b0e14]/40 animate-pulse"
             />
           ))}
+        </div>
+      ) : isRpcError ? (
+        <div className="text-center py-16 border border-[#292d30] rounded-[16px] bg-black p-8 space-y-4">
+          <div className="w-12 h-12 rounded-[6px] bg-[#0b0e14] text-[#ff9592] border border-[#292d30] flex items-center justify-center mx-auto">
+            <AlertCircleIcon className="w-6 h-6" />
+          </div>
+          <h3 className="font-medium text-base text-white">Studionet RPC Connection Issue</h3>
+          <p className="text-xs text-[#a1a4a5] max-w-sm mx-auto leading-relaxed">
+            Could not fetch tasks from GenLayer Studionet. The registry is not empty; check RPC endpoint health or try reconnecting.
+          </p>
+          <button
+            onClick={() => void loadData()}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-[6px] border border-[#292d30] hover:border-white bg-transparent text-[#ffffff] text-xs font-medium transition-colors"
+          >
+            <span>Retry Connection</span>
+          </button>
         </div>
       ) : filteredTasks.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">

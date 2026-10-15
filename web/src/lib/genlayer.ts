@@ -14,7 +14,7 @@ export const STUDIONET_CHAIN_ID = Number(
   process.env.NEXT_PUBLIC_STUDIONET_CHAIN_ID || 61999
 );
 
-export const DEPLOYED_CONTRACT_ADDRESS = "0x7bE669b18689afb885352c87A487c8432c58d56D";
+export const DEPLOYED_CONTRACT_ADDRESS = "0x2E479f3E98cDd6B6cF32bE3E563207Fa90578642";
 
 export const CONTRACT_ADDRESS: `0x${string}` =
   ((process.env.NEXT_PUBLIC_CONTRACT_ADDRESS ||
@@ -47,7 +47,13 @@ export async function fetchContractVersion(): Promise<string> {
   return String(res);
 }
 
-export async function fetchTotalTasks(): Promise<number> {
+export interface TotalTasksResult {
+  count: number;
+  isRpcError: boolean;
+  errorMessage?: string;
+}
+
+export async function fetchTotalTasksDetailed(): Promise<TotalTasksResult> {
   const client = getReadClient();
   try {
     const res = await client.readContract({
@@ -55,10 +61,16 @@ export async function fetchTotalTasks(): Promise<number> {
       functionName: "get_total_tasks",
       args: [],
     });
-    return Number(res);
-  } catch {
-    return 0;
+    return { count: Number(res), isRpcError: false };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { count: 0, isRpcError: true, errorMessage: msg };
   }
+}
+
+export async function fetchTotalTasks(): Promise<number> {
+  const res = await fetchTotalTasksDetailed();
+  return res.count;
 }
 
 function normalizeTask(raw: Record<string, unknown>): TaskRecord {
@@ -88,7 +100,13 @@ function normalizeTask(raw: Record<string, unknown>): TaskRecord {
   };
 }
 
-export async function fetchTask(taskId: number): Promise<TaskRecord | null> {
+export interface DetailedTaskResult {
+  task: TaskRecord | null;
+  isRpcError: boolean;
+  errorMessage?: string;
+}
+
+export async function fetchTaskDetailed(taskId: number): Promise<DetailedTaskResult> {
   const client = getReadClient();
   try {
     const raw = (await client.readContract({
@@ -96,11 +114,17 @@ export async function fetchTask(taskId: number): Promise<TaskRecord | null> {
       functionName: "get_task",
       args: [taskId],
     })) as Record<string, unknown>;
-    if (!raw || Object.keys(raw).length === 0) return null;
-    return normalizeTask(raw);
-  } catch {
-    return null;
+    if (!raw || Object.keys(raw).length === 0) return { task: null, isRpcError: false };
+    return { task: normalizeTask(raw), isRpcError: false };
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    return { task: null, isRpcError: true, errorMessage: msg };
   }
+}
+
+export async function fetchTask(taskId: number): Promise<TaskRecord | null> {
+  const res = await fetchTaskDetailed(taskId);
+  return res.task;
 }
 
 export async function fetchTasksByStatus(
@@ -122,19 +146,53 @@ export async function fetchTasksByStatus(
   }
 }
 
+export interface DetailedDiscoveryResult {
+  tasks: TaskRecord[];
+  failedIds: number[];
+  totalCount: number;
+  isRpcError: boolean;
+  isFallback: boolean;
+  errorMessage?: string;
+}
+
 export interface ResilientDiscoveryResult {
   tasks: TaskRecord[];
   failedIds: number[];
   totalCount: number;
+  isRpcError?: boolean;
 }
 
-export async function fetchTasksResilient(
+export async function fetchTasksDetailed(
   status: string,
   offset = 0,
   limit = 50
-): Promise<ResilientDiscoveryResult> {
+): Promise<DetailedDiscoveryResult> {
   const client = getReadClient();
-  const totalCount = await fetchTotalTasks();
+  const totalRes = await fetchTotalTasksDetailed();
+
+  if (totalRes.isRpcError) {
+    return {
+      tasks: [],
+      failedIds: [],
+      totalCount: 0,
+      isRpcError: true,
+      isFallback: false,
+      errorMessage: totalRes.errorMessage,
+    };
+  }
+
+  const totalCount = totalRes.count;
+
+  // Genuine empty state on-chain
+  if (totalCount <= 0) {
+    return {
+      tasks: [],
+      failedIds: [],
+      totalCount: 0,
+      isRpcError: false,
+      isFallback: false,
+    };
+  }
 
   try {
     const list = (await client.readContract({
@@ -147,15 +205,12 @@ export async function fetchTasksResilient(
         tasks: list.map(normalizeTask),
         failedIds: [],
         totalCount,
+        isRpcError: false,
+        isFallback: false,
       };
     }
   } catch (err) {
     console.warn("Bulk get_tasks_by_status failed, attempting individual discovery:", err);
-  }
-
-  // If no tasks exist on-chain, exit immediately with zero failures
-  if (totalCount <= 0) {
-    return { tasks: [], failedIds: [], totalCount: 0 };
   }
 
   // Fallback: Individual ID fetching with failedIds tracking
@@ -179,7 +234,27 @@ export async function fetchTasksResilient(
     }
   }
 
-  return { tasks, failedIds, totalCount };
+  return {
+    tasks,
+    failedIds,
+    totalCount,
+    isRpcError: false,
+    isFallback: true,
+  };
+}
+
+export async function fetchTasksResilient(
+  status: string,
+  offset = 0,
+  limit = 50
+): Promise<ResilientDiscoveryResult> {
+  const detailed = await fetchTasksDetailed(status, offset, limit);
+  return {
+    tasks: detailed.tasks,
+    failedIds: detailed.failedIds,
+    totalCount: detailed.totalCount,
+    isRpcError: detailed.isRpcError,
+  };
 }
 
 export async function fetchDispute(taskId: number): Promise<DisputeRecord | null> {
