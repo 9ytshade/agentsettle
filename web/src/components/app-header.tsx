@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { WalletConnect } from "./wallet-connect";
-import { AgentSettleLogo } from "./icons";
+import { AgentSettleLogo, MenuIcon, CloseIcon } from "./icons";
 
 const NAV_ITEMS = [
   { href: "/", label: "Marketplace" },
@@ -15,6 +15,12 @@ const NAV_ITEMS = [
 
 export default function AppHeader() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-40 border-b border-[#292d30] bg-black/90 backdrop-blur-[25px]">
@@ -31,7 +37,7 @@ export default function AppHeader() {
           </Link>
         </div>
 
-        {/* Center: Symmetrically Centered Navigation Menu */}
+        {/* Center: Desktop Centered Navigation Menu */}
         <nav className="hidden md:flex items-center justify-center gap-1">
           {NAV_ITEMS.map((item) => {
             const active = pathname === item.href;
@@ -51,7 +57,7 @@ export default function AppHeader() {
           })}
         </nav>
 
-        {/* Right: Double-line Network Status & Wallet */}
+        {/* Right: Network Status, Wallet & Mobile Hamburger Toggle */}
         <div className="flex items-center justify-end gap-2.5">
           <div className="hidden sm:flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#0b0e14] border border-[#292d30] font-mono flex-shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#3ad389] flex-shrink-0 animate-pulse" />
@@ -61,8 +67,60 @@ export default function AppHeader() {
             </div>
           </div>
           <WalletConnect />
+
+          {/* Mobile Hamburger Toggle Button */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileMenuOpen}
+            className="md:hidden flex items-center justify-center w-9 h-9 rounded-[6px] bg-[#0b0e14] border border-[#292d30] text-[#a1a4a5] hover:text-white hover:border-white transition-colors"
+          >
+            {mobileMenuOpen ? (
+              <CloseIcon className="w-4 h-4" />
+            ) : (
+              <MenuIcon className="w-4 h-4" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t border-[#292d30] bg-black/95 backdrop-blur-[25px] px-4 py-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-150">
+          <nav className="flex flex-col space-y-1">
+            {NAV_ITEMS.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-[6px] text-xs font-medium transition-colors ${
+                    active
+                      ? "bg-[#0b0e14] text-white border border-[#292d30]"
+                      : "text-[#a1a4a5] hover:text-white hover:bg-[#0b0e14]/50"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {active && (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#9281f7]" />
+                  )}
+                </Link>
+              );
+            })}
+          </nav>
+
+          {/* Mobile Network Status Pill */}
+          <div className="pt-2 border-t border-[#1e2124] flex items-center justify-between px-3 py-2 rounded-[6px] bg-[#0b0e14]/70 border border-[#292d30] font-mono text-[11px]">
+            <span className="text-[#a1a4a5]">Network:</span>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#3ad389] animate-pulse" />
+              <span className="text-[#f0f0f0] font-medium">Chain 61999 (Studionet)</span>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
