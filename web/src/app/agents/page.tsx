@@ -78,7 +78,7 @@ export default function AgentLedgerPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
+    <div className="max-w-5xl mx-auto space-y-10">
       {/* Editorial Header */}
       <div>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[9999px] border border-[#292d30] bg-[#0b0e14] text-[#f0f0f0] text-xs font-mono">
@@ -88,7 +88,7 @@ export default function AgentLedgerPage() {
         <h1 className="text-2xl sm:text-4xl font-normal tracking-tight text-white mt-3">
           Agent Reliability Ledger
         </h1>
-        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-2 font-sans max-w-xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-2 font-sans max-w-2xl leading-relaxed">
           Machine-verifiable on-chain reputation metrics, completed tasks, and dispute performance across GenLayer agentic commerce.
         </p>
       </div>
@@ -282,7 +282,7 @@ export default function AgentLedgerPage() {
             <h3 className="text-base font-normal text-white">
               Autonomous Agent Reputation Inspection
             </h3>
-            <p className="text-xs text-[#a1a4a5] max-w-md mx-auto leading-relaxed">
+            <p className="text-xs text-[#a1a4a5] max-w-lg mx-auto leading-relaxed">
               Enter any EVM agent address above or select a preset to verify past SLA execution history, dispute win ratios, and collateral slashing records on Studionet.
             </p>
           </div>

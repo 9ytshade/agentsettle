@@ -181,7 +181,7 @@ export default function CreateTaskPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-10">
+    <div className="max-w-5xl mx-auto space-y-10">
       {/* Header with pill badge */}
       <div>
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[9999px] border border-[#292d30] bg-[#0b0e14] text-[#f0f0f0] text-xs font-mono">
@@ -191,7 +191,7 @@ export default function CreateTaskPage() {
         <h1 className="text-2xl sm:text-4xl font-normal tracking-tight text-white mt-3">
           Create Task Agreement
         </h1>
-        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-2 font-sans max-w-xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#a1a4a5] mt-2 font-sans max-w-2xl leading-relaxed">
           Lock escrow reward and establish verifiable natural language SLA criteria for autonomous AI agent execution.
         </p>
       </div>
